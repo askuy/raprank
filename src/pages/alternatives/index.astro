@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ToolIcon from '../../components/ToolIcon.astro';
+import { getTools } from '../../lib/data';
+const tools = (await getTools()).filter((t) => t.data.alternativesPage);
+---
+<Base title="Alternatives to Popular AI Music & Rap Video Tools" description="Find the best alternatives to Suno, Udio, Freebeat, Kaiber, Viggle and other AI music and rap video tools.">
+  <Breadcrumbs items={[{ name: 'Alternatives', href: '/alternatives' }]} />
+  <h1 class="mb-8 text-4xl font-black text-white">Alternatives</h1>
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {tools.map((t) => (
+      <a href={`/alternatives/${t.id}`} class="card flex items-center gap-3 hover:border-brand">
+        <ToolIcon tool={t} /><span class="font-semibold text-white">{t.data.name} alternatives</span>
+      </a>
+    ))}
+  </div>
+</Base>

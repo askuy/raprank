@@ -1,0 +1,138 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ToolGrid from '../components/ToolGrid.astro';
+import Faq from '../components/Faq.astro';
+import { getTools } from '../lib/data';
+import { breadcrumbSchema, faqSchema } from '../lib/schema';
+import { SITE } from '../lib/site';
+
+const related = (await getTools()).filter((t) => ['ai-rap-song', 'ai-rap-lyrics', 'ai-rap-video'].includes(t.data.category.id)).slice(0, 6);
+const crumbs = [{ name: 'Rap Name Generator', href: '/rap-name-generator' }];
+const faq = [
+  { q: 'How do I come up with a good rap name?', a: 'Start from something real about you: your name, your city, a nickname or a trait. Then add a style marker like Lil, Young, MC or a $ sign. Keep it short (one or two words), easy to say out loud, and easy to search for. Check Spotify and Instagram before you commit.' },
+  { q: 'Is this rap name generator free?', a: 'Yes. It runs entirely in your browser, you don\'t need to sign up, and you can generate as many names as you want.' },
+  { q: 'Can I use my real name?', a: 'Yes. Type your name or a nickname and the generator will mix it into the results, for example "Lil Jay" or "Jay Da Kid".' },
+  { q: 'Are the generated names copyrighted?', a: 'The names are random combinations of words. Some may match existing artists by chance, so search streaming services and check trademarks before you release music under a name.' },
+];
+
+const app = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Rap Name Generator',
+  url: `${SITE.url}/rap-name-generator`,
+  applicationCategory: 'EntertainmentApplication',
+  operatingSystem: 'Web',
+  offers: { '@type': 'Offer', price: 0, priceCurrency: 'USD' },
+};
+---
+<Base
+  title="Rap Name Generator: 1000s of Free Rapper Names"
+  description="Free rap name generator. Get 20 rapper names in one click, in styles like trap, drill, old school, Lil/Young and female rapper. You can also mix in your own name. No sign-up."
+  schema={[breadcrumbSchema(crumbs), app, faqSchema(faq)]}
+>
+  <Breadcrumbs items={crumbs} />
+  <div class="mx-auto max-w-3xl text-center">
+    <h1 class="text-4xl font-black text-white sm:text-5xl">Rap Name Generator</h1>
+    <p class="mt-4 text-lg text-zinc-400">Find your rapper name. Choose a style, add your name if you want, and get 20 ideas at a time.</p>
+  </div>
+
+  <form id="gen" class="card mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-[1fr_1fr_auto]">
+    <label class="text-sm text-zinc-400">Your name or nickname (optional)
+      <input id="name" maxlength="20" placeholder="e.g. Jay" class="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-white focus:border-brand focus:outline-none" />
+    </label>
+    <label class="text-sm text-zinc-400">Style
+      <select id="style" class="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-white focus:border-brand focus:outline-none">
+        <option value="mix">Mix it up</option>
+        <option value="trap">Trap</option>
+        <option value="drill">Drill</option>
+        <option value="oldschool">Old school / MC</option>
+        <option value="lil">Lil / Young</option>
+        <option value="female">Female rapper</option>
+        <option value="funny">Funny</option>
+      </select>
+    </label>
+    <button class="btn self-end justify-center">Generate</button>
+  </form>
+
+  <ul id="out" class="mx-auto mt-8 grid max-w-3xl gap-2 sm:grid-cols-2" aria-live="polite"></ul>
+
+  <section class="prose-rr mx-auto mt-16 max-w-3xl space-y-4">
+    <h2 class="text-2xl font-bold text-white">How the rap name generator works</h2>
+    <p>Each style uses its own word bank and naming patterns. Trap names lean on money, ice and dollar signs. Drill names are short and cold. Old school names use MC, DJ and "the Great". Lil and Young are the classic prefixes. If you type your name, it gets mixed into about half of the results.</p>
+    <h2 class="text-2xl font-bold text-white">Tips for picking your rapper name</h2>
+    <p>Say it out loud over a beat. If it doesn't sound good in an ad-lib, keep looking. Search it on Spotify, YouTube and Instagram so you aren't competing with an artist who already uses it. Shorter names are easier to remember and easier to fit on cover art.</p>
+  </section>
+
+  <Faq items={faq} />
+
+  <section class="mt-14">
+    <h2 class="mb-2 text-2xl font-bold text-white">Got a name? Now make the track</h2>
+    <p class="mb-6 text-zinc-400">AI tools that write your bars, make the song and turn it into a rap video.</p>
+    <ToolGrid tools={related} />
+  </section>
+
+  <script>
+    const W = {
+      trap: { pre: ['Lil', 'Young', 'Big', 'Yung', 'Baby', 'Slime', 'Ice'], adj: ['Icy', 'Drippy', 'Frozen', 'Rich', 'Glacier', 'Platinum', 'Diamond', 'Codeine', 'Wavy', 'Lavish', 'Savage', 'Plug'], noun: ['Bandz', 'Racks', 'Drip', 'Guap', 'Glock', 'Chain', 'Opps', 'Bando', 'Trap', 'Molly', 'Wrist', 'Chopper', 'Rolex', 'Money', 'Mula'], suf: ['$', ' Money', ' Da Plug', ' Bandz', ' Gotti', ' 2x', ' Baby'] },
+      drill: { pre: ['Lil', 'Young', 'Big', 'K', 'Tg', 'Sav', 'Grim'], adj: ['Cold', 'Grim', 'Dark', 'Silent', 'Masked', 'Hollow', 'Steel', 'Block', 'Smoke', 'Ruthless'], noun: ['Opp', 'Block', 'Shadow', 'Drill', 'Smoke', 'Glide', 'Slide', 'Ghost', 'Spin', 'Mask', 'Wolf', 'Kaos'], suf: [' 41', ' OTF', ' Da Menace', ' Spinz', ' Glizzy', ' 9'] },
+      oldschool: { pre: ['MC', 'DJ', 'Grandmaster', 'Kool', 'Rakim', 'Big Daddy', 'Professor'], adj: ['Fresh', 'Funky', 'Smooth', 'Golden', 'Def', 'Supreme', 'Fly', 'Mighty', 'Rhythmic', 'Boogie'], noun: ['Flow', 'Rhyme', 'Breaks', 'Groove', 'Scratch', 'Verse', 'Mic', 'Beat', 'Funk', 'Soul', 'Cypher', 'Poet'], suf: [' the Great', ' Supreme', ' Da Kid', ' One', ' Prophet', ' Kane'] },
+      lil: { pre: ['Lil', 'Young', 'Yung', 'Lil', 'Young', 'Baby', 'Big'], adj: ['Lucky', 'Shiny', 'Wild', 'Sweet', 'Crazy', 'Rare', 'Pretty', 'Lonely', 'Loud', 'Bright'], noun: ['Tecca', 'Ghost', 'Star', 'Moon', 'Wave', 'Sky', 'Smoke', 'Flex', 'Kid', 'Prince', 'Boss', 'Vibe'], suf: [' Jr', ' Baby', ' Tha Kid', ' 2', ''] },
+      female: { pre: ['Queen', 'Lady', 'Lil', 'Miss', 'Baby', 'Princess', 'Mama'], adj: ['Pink', 'Savage', 'Velvet', 'Diamond', 'Golden', 'Bad', 'Glossy', 'Wicked', 'Cherry', 'Royal'], noun: ['Kitty', 'Barbie', 'Venom', 'Rose', 'Ice', 'Honey', 'Doll', 'Diva', 'Siren', 'Stiletto', 'Pearl', 'Fendi'], suf: [' Bae', ' Doll', ' Diamonds', ' the Queen', ' Rose', ' B'] },
+      funny: { pre: ['Lil', 'Big', 'MC', 'DJ', 'Young', 'Baby', 'Sir'], adj: ['Soggy', 'Spicy', 'Sleepy', 'Crunchy', 'Moist', 'Tiny', 'Grumpy', 'Lukewarm', 'Chunky', 'Wobbly'], noun: ['Nugget', 'Pickle', 'Waffle', 'Burrito', 'Toaster', 'Noodle', 'Biscuit', 'Taco', 'Potato', 'Pretzel', 'Meatball', 'Sock'], suf: [' Supreme', ' Da Snack', ' XL', ' Deluxe', ' 3000', ' Junior'] },
+    } as const;
+    type Style = keyof typeof W;
+    const pick = <T,>(a: readonly T[]) => a[Math.floor(Math.random() * a.length)];
+    const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+
+    function one(style: Style, name: string) {
+      const w = W[style];
+      const n = name && Math.random() < 0.5 ? cap(name) : pick(w.noun);
+      const patterns = [
+        () => `${pick(w.pre)} ${n}`,
+        () => `${pick(w.adj)} ${n}`,
+        () => `${n}${pick(w.suf)}`,
+        () => `${pick(w.pre)} ${pick(w.adj)}`,
+        () => `${pick(w.adj)}${pick(w.noun).toLowerCase()}`,
+        () => `${pick(w.adj)} ${n}${pick(w.suf)}`,
+      ];
+      return pick(patterns)().replace(/\s+/g, ' ').trim();
+    }
+
+    const form = document.getElementById('gen') as HTMLFormElement;
+    const out = document.getElementById('out')!;
+    function generate() {
+      const name = (document.getElementById('name') as HTMLInputElement).value.replace(/[^\p{L}\p{N} ]/gu, '').trim();
+      const sel = (document.getElementById('style') as HTMLSelectElement).value;
+      const names = new Set<string>();
+      for (let i = 0; names.size < 20 && i < 200; i++) {
+        const style = (sel === 'mix' ? pick(Object.keys(W)) : sel) as Style;
+        names.add(one(style, name));
+      }
+      out.replaceChildren(
+        ...[...names].map((n) => {
+          const li = document.createElement('li');
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'card flex w-full items-center justify-between text-left text-lg font-bold text-white hover:border-brand';
+          b.textContent = n;
+          const hint = document.createElement('span');
+          hint.className = 'text-xs font-normal text-zinc-500';
+          hint.textContent = 'copy';
+          b.append(hint);
+          b.addEventListener('click', () => {
+            navigator.clipboard?.writeText(n);
+            hint.textContent = 'copied!';
+          });
+          li.append(b);
+          return li;
+        }),
+      );
+    }
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      generate();
+    });
+    generate();
+  </script>
+</Base>

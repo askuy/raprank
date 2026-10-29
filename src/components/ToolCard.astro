@@ -1,0 +1,19 @@
+---
+import ToolIcon from './ToolIcon.astro';
+import { pricingLabel, type Tool } from '../lib/data';
+interface Props { tool: Tool; rank?: number }
+const { tool, rank } = Astro.props;
+const d = tool.data;
+---
+<a href={`/tool/${tool.id}`} class="card group flex flex-col gap-3 hover:border-zinc-600">
+  <div class="flex items-center gap-3">
+    {rank && <span class="text-2xl font-black text-zinc-700">#{rank}</span>}
+    <ToolIcon tool={tool} />
+    <div class="min-w-0">
+      <p class="truncate font-semibold text-white group-hover:text-brand">{d.name}</p>
+      <p class="text-xs text-zinc-500">{pricingLabel(d.pricing)}{d.featured && ' · Featured'}</p>
+    </div>
+  </div>
+  <p class="text-sm text-zinc-400">{d.tagline}</p>
+  {d.freeTier && <p class="mt-auto text-xs text-emerald-400/80">Free: {d.freeTier}</p>}
+</a>

@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ToolGrid from '../../components/ToolGrid.astro';
+import { getTools } from '../../lib/data';
+import { breadcrumbSchema } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const tools = await getTools();
+  const tags = await getCollection('tags');
+  return tags
+    .map((tag) => ({ params: { slug: tag.id }, props: { tag, tools: tools.filter((t) => t.data.tags.some((x) => x.id === tag.id)) } }))
+    .filter((p) => p.props.tools.length > 0);
+}
+const { tag, tools } = Astro.props;
+const crumbs = [{ name: tag.data.name, href: `/tag/${tag.id}` }];
+// Thin tag pages (<3 tools) stay for navigation but are not indexed.
+---
+<Base title={`${tag.data.name} AI Rap & Music Tools`} description={`${tools.length} AI rap and music video tools tagged ${tag.data.name}.`} noindex={tools.length < 3} schema={[breadcrumbSchema(crumbs)]}>
+  <Breadcrumbs items={crumbs} />
+  <h1 class="mb-8 text-4xl font-black text-white">{tag.data.name} tools <span class="text-zinc-600">({tools.length})</span></h1>
+  <ToolGrid tools={tools} />
+</Base>

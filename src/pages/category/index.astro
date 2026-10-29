@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ToolIcon from '../../components/ToolIcon.astro';
+import { getTree } from '../../lib/data';
+import { breadcrumbSchema } from '../../lib/schema';
+const tree = await getTree();
+const crumbs = [{ name: 'Categories', href: '/category' }];
+---
+<Base title="All AI Rap & Music Video Tool Categories" description="Browse every category of AI rap and music tools: rap video generators, music video makers, rap song generators, rapper voices and lyric writers." schema={[breadcrumbSchema(crumbs)]}>
+  <Breadcrumbs items={crumbs} />
+  <h1 class="mb-10 text-4xl font-black text-white">All categories</h1>
+  {tree.map(({ group, categories }) => (
+    <section class="mb-12">
+      <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-500">{group.data.name}</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        {categories.map(({ category, tools }) => (
+          <div class="card">
+            <a href={`/category/${category.id}`} class="text-lg font-bold text-white hover:text-brand">{category.data.name} <span class="text-zinc-600">({tools.length})</span></a>
+            <p class="mt-1 text-sm text-zinc-400">{category.data.description}</p>
+            <ul class="mt-4 space-y-2">
+              {tools.map((t) => (
+                <li><a href={`/tool/${t.id}`} class="flex items-center gap-2 text-sm text-zinc-300 hover:text-white"><ToolIcon tool={t} size={20} />{t.data.name}</a></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+</Base>

@@ -1,0 +1,5 @@
+[
+  { "id": "video", "name": "Video", "priority": 1 },
+  { "id": "audio", "name": "Audio & Voice", "priority": 2 },
+  { "id": "writing", "name": "Lyrics & Writing", "priority": 3 }
+]

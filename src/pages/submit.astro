@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../lib/site';
+---
+<Base title="Submit Your AI Tool" description="Submit your AI rap, music video, voice or lyrics tool to the RapRank directory.">
+  <div class="mx-auto max-w-2xl">
+    <h1 class="text-4xl font-black text-white">Submit your AI tool</h1>
+    <p class="mt-4 text-lg text-zinc-400">Built an AI rap video, music video, rap song, rapper voice or lyrics tool? Send us the details and we'll review it for the directory.</p>
+    <div class="mt-8 grid gap-4 sm:grid-cols-2">
+      <div class="card">
+        <p class="text-lg font-bold text-white">Free listing</p>
+        <p class="mt-2 text-sm text-zinc-400">Reviewed in the order we receive them. Your tool gets its own page plus a spot in its category.</p>
+      </div>
+      <div class="card border-brand">
+        <p class="text-lg font-bold text-white">Featured listing</p>
+        <p class="mt-2 text-sm text-zinc-400">Faster review, a featured badge, and a pinned spot on your category page and the home page.</p>
+      </div>
+    </div>
+    <p class="mt-8 text-zinc-400">Include: tool name, URL, a one-line description, pricing and free tier, and 3–5 key features.</p>
+    <a href={SITE.submitUrl} class="btn mt-6">Email your submission</a>
+  </div>
+</Base>

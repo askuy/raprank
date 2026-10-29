@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ToolGrid from '../../components/ToolGrid.astro';
+import CompareTable from '../../components/CompareTable.astro';
+import { getCategoryTools } from '../../lib/data';
+import { breadcrumbSchema, itemListSchema } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const categories = await getCollection('categories');
+  return categories.map((category) => ({ params: { slug: category.id }, props: { category } }));
+}
+const { category } = Astro.props;
+const tools = await getCategoryTools(category.id);
+const siblings = (await getCollection('categories')).filter((c) => c.data.group.id === category.data.group.id && c.id !== category.id);
+const crumbs = [{ name: 'Categories', href: '/category' }, { name: category.data.name, href: `/category/${category.id}` }];
+---
+<Base title={`${category.data.title} (${tools.length} Tools)`} description={category.data.description} schema={[breadcrumbSchema(crumbs), itemListSchema(category.data.title, tools)]}>
+  <Breadcrumbs items={crumbs} />
+  <h1 class="text-4xl font-black text-white">{category.data.title}</h1>
+  <p class="mt-4 max-w-3xl text-lg text-zinc-400">{category.data.intro}</p>
+  <div class="mt-10"><ToolGrid tools={tools} /></div>
+  <h2 class="mb-4 mt-14 text-2xl font-bold text-white">Compare {category.data.name.toLowerCase()}</h2>
+  <CompareTable tools={tools} />
+  {siblings.length > 0 && (
+    <div class="mt-12 flex flex-wrap gap-2">
+      <span class="mr-2 text-zinc-500">Related:</span>
+      {siblings.map((c) => <a href={`/category/${c.id}`} class="chip">{c.data.name}</a>)}
+    </div>
+  )}
+</Base>

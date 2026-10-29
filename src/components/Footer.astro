@@ -1,0 +1,30 @@
+---
+import { SITE } from '../lib/site';
+import { getTree } from '../lib/data';
+import { getCollection } from 'astro:content';
+const tree = await getTree();
+const lists = await getCollection('lists');
+---
+<footer class="border-t border-zinc-800 text-sm text-zinc-500">
+  <div class="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-5">
+    <div>
+      <a href="/" class="text-lg font-black text-white">Rap<span class="text-brand">Rank</span></a>
+      <p class="mt-2">{SITE.tagline}.</p>
+    </div>
+    {tree.map(({ group, categories }) => (
+      <div>
+        <p class="mb-2 font-semibold text-zinc-300">{group.data.name}</p>
+        <ul class="space-y-1">
+          {categories.map(({ category }) => <li><a href={`/category/${category.id}`} class="hover:text-white">{category.data.name}</a></li>)}
+        </ul>
+      </div>
+    ))}
+    <div>
+      <p class="mb-2 font-semibold text-zinc-300">Best of</p>
+      <ul class="space-y-1">
+        {lists.map((l) => <li><a href={`/best/${l.id}`} class="hover:text-white">{l.data.title.split(':')[0].replace(/ \(.*\)/, '')}</a></li>)}
+      </ul>
+    </div>
+  </div>
+  <p class="pb-8 text-center">© {new Date().getFullYear()} {SITE.name} · <a href="/about" class="hover:text-white">About</a> · <a href="/submit" class="hover:text-white">Submit</a></p>
+</footer>

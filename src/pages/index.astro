@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+import ToolGrid from '../components/ToolGrid.astro';
+import { SITE, FREE_TOOLS } from '../lib/site';
+import { getTree, getTools } from '../lib/data';
+import { getCollection } from 'astro:content';
+import { itemListSchema } from '../lib/schema';
+
+const tree = await getTree();
+const tools = await getTools();
+const rapVideo = tools.filter((t) => t.data.category.id === 'ai-rap-video');
+const lists = await getCollection('lists');
+---
+<Base
+  title="AI Rap Video Generator Directory: Best AI Rap & Music Video Tools | RapRank"
+  description={SITE.description}
+  schema={[
+    { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url,
+      potentialAction: { '@type': 'SearchAction', target: `${SITE.url}/search?q={q}`, 'query-input': 'required name=q' } },
+    itemListSchema('AI Rap Video Generators', rapVideo),
+  ]}
+>
+  <section class="mb-14 text-center">
+    <p class="mb-3 text-sm font-semibold uppercase tracking-widest text-brand">{tools.length} tools ranked · updated {SITE.updated}</p>
+    <h1 class="mx-auto max-w-3xl text-4xl font-black tracking-tight text-white sm:text-5xl">
+      The best AI rap video generators, and every AI rap tool around them
+    </h1>
+    <p class="mx-auto mt-5 max-w-2xl text-lg text-zinc-400">
+      Compare AI rap video generators, music video makers, rap song generators, rapper voices and lyric tools. See free tiers, pricing and lip-sync quality side by side.
+    </p>
+    <form action="/search" class="mx-auto mt-8 flex max-w-lg gap-2">
+      <input name="q" type="search" placeholder="Search tools, e.g. lip-sync, free, suno…" class="flex-1 rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-white placeholder:text-zinc-500 focus:border-brand focus:outline-none" />
+      <button class="btn">Search</button>
+    </form>
+  </section>
+
+  <section class="mb-14">
+    <div class="mb-5 flex items-end justify-between">
+      <h2 class="text-2xl font-bold text-white">AI Rap Video Generators</h2>
+      <a href="/best/best-ai-rap-video-generator" class="text-sm text-brand hover:underline">See the ranked list →</a>
+    </div>
+    <ToolGrid tools={rapVideo.slice(0, 9)} />
+  </section>
+
+  <section class="mb-14">
+    <h2 class="mb-5 text-2xl font-bold text-white">Browse the directory</h2>
+    <div class="grid gap-6 md:grid-cols-3">
+      {tree.map(({ group, categories }) => (
+        <div class="card">
+          <p class="mb-3 text-sm font-semibold uppercase tracking-wider text-zinc-500">{group.data.name}</p>
+          <ul class="space-y-2">
+            {categories.map(({ category, tools }) => (
+              <li class="flex justify-between">
+                <a href={`/category/${category.id}`} class="text-zinc-200 hover:text-brand">{category.data.name}</a>
+                <span class="text-zinc-600">{tools.length}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="mb-14 grid gap-6 md:grid-cols-2">
+    <div class="card">
+      <h2 class="mb-3 text-xl font-bold text-white">Best-of lists</h2>
+      <ul class="space-y-2">
+        {lists.map((l) => <li><a href={`/best/${l.id}`} class="text-zinc-300 hover:text-brand">{l.data.title}</a></li>)}
+      </ul>
+    </div>
+    <div class="grid gap-6">
+      {FREE_TOOLS.map((t) => (
+        <a href={t.href} class="card block hover:border-brand">
+          <p class="text-sm font-semibold uppercase tracking-wider text-brand">Free tool</p>
+          <h2 class="mt-1 text-xl font-bold text-white">{t.name}</h2>
+          <p class="mt-2 text-zinc-400">{t.blurb}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>

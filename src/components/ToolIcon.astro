@@ -1,0 +1,13 @@
+---
+import { hostname, type Tool } from '../lib/data';
+interface Props { tool: Tool; size?: number }
+const { tool, size = 40 } = Astro.props;
+---
+<img
+  src={`https://www.google.com/s2/favicons?domain=${hostname(tool)}&sz=64`}
+  alt={`${tool.data.name} logo`}
+  width={size}
+  height={size}
+  loading="lazy"
+  class="shrink-0 rounded-lg bg-zinc-800 p-1"
+/>

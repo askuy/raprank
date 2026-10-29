@@ -1,0 +1,13 @@
+[
+  { "id": "free", "name": "Free" },
+  { "id": "no-signup", "name": "No Sign-up" },
+  { "id": "lip-sync", "name": "Lip-Sync" },
+  { "id": "lyric-sync", "name": "Lyric Video" },
+  { "id": "beat-sync", "name": "Beat-Synced" },
+  { "id": "photo-to-video", "name": "Photo to Video" },
+  { "id": "commercial-license", "name": "Commercial License" },
+  { "id": "voice-cloning", "name": "Voice Cloning" },
+  { "id": "mobile-app", "name": "Mobile App" },
+  { "id": "api", "name": "API" },
+  { "id": "diss-track", "name": "Diss Track" }
+]

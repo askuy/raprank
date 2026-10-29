@@ -1,0 +1,9 @@
+---
+import ToolCard from './ToolCard.astro';
+import type { Tool } from '../lib/data';
+interface Props { tools: Tool[]; ranked?: boolean }
+const { tools, ranked = false } = Astro.props;
+---
+<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  {tools.map((t, i) => <ToolCard tool={t} rank={ranked ? i + 1 : undefined} />)}
+</div>

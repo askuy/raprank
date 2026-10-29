@@ -1,0 +1,142 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ToolGrid from '../components/ToolGrid.astro';
+import Faq from '../components/Faq.astro';
+import { getTools } from '../lib/data';
+import { breadcrumbSchema, faqSchema } from '../lib/schema';
+import { SITE } from '../lib/site';
+import { STYLES } from '../lib/lyrics';
+
+const related = (await getTools()).filter((t) => ['ai-rap-lyrics', 'ai-rap-song'].includes(t.data.category.id)).slice(0, 6);
+const crumbs = [{ name: 'Rap Lyrics Generator', href: '/rap-lyrics-generator' }];
+const faq = [
+  { q: 'How does this rap lyrics generator work?', a: 'It builds verses from rhyme families. Every two bars end on the same rhyme (an AABB scheme), and your topic gets worked into the lines. Line endings are color-coded so you can see the rhyme scheme at a glance.' },
+  { q: 'Is the rap lyrics generator free?', a: 'Yes. It\'s completely free, you don\'t need to sign up, and it runs in your browser. Generate as many verses and songs as you like.' },
+  { q: 'Can I use the lyrics in my own songs?', a: 'Yes. Use them as a starting point, then rewrite lines in your own voice. The best rap lyrics come from your own life, so swap in details only you could write.' },
+  { q: 'Can AI write rap lyrics for me?', a: 'Yes. If you want AI-written lyrics that follow a detailed prompt, see our list of the best AI rap lyrics generators, or use an AI rap song generator to get lyrics, a beat and vocals in one go.' },
+];
+const app = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Rap Lyrics Generator',
+  url: `${SITE.url}/rap-lyrics-generator`,
+  applicationCategory: 'EntertainmentApplication',
+  operatingSystem: 'Web',
+  offers: { '@type': 'Offer', price: 0, priceCurrency: 'USD' },
+};
+---
+<Base
+  title="Rap Lyrics Generator: Free Rap Lyric Maker for Verses & Hooks"
+  description="Free rap lyrics generator. Pick a topic and a style (trap, drill, boom bap or motivational) and get rhyming verses, hooks or a full rap song. Rhymes are color-coded. No sign-up."
+  schema={[breadcrumbSchema(crumbs), app, faqSchema(faq)]}
+>
+  <Breadcrumbs items={crumbs} />
+  <div class="mx-auto max-w-3xl text-center">
+    <h1 class="text-4xl font-black text-white sm:text-5xl">Rap Lyrics Generator</h1>
+    <p class="mt-4 text-lg text-zinc-400">Pick a topic and a style, then generate rhyming bars. Get a 16-bar verse or a full song with hooks, with every rhyme pair color-coded.</p>
+  </div>
+
+  <form id="gen" class="card mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-[2fr_1fr_1fr_auto]">
+    <label class="text-sm text-zinc-400">Topic (optional)
+      <input id="topic" maxlength="30" placeholder="e.g. my hometown, money, love" class="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-white focus:border-brand focus:outline-none" />
+    </label>
+    <label class="text-sm text-zinc-400">Style
+      <select id="style" class="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-white focus:border-brand focus:outline-none">
+        {Object.entries(STYLES).map(([k, v]) => <option value={k}>{v.label}</option>)}
+      </select>
+    </label>
+    <label class="text-sm text-zinc-400">Length
+      <select id="length" class="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-white focus:border-brand focus:outline-none">
+        <option value="verse">16-bar verse</option>
+        <option value="song">Full song</option>
+      </select>
+    </label>
+    <button class="btn self-end justify-center">Generate</button>
+  </form>
+
+  <div class="mx-auto mt-8 max-w-3xl">
+    <div class="mb-3 flex justify-end">
+      <button id="copy" type="button" class="chip">Copy lyrics</button>
+    </div>
+    <div id="out" class="card space-y-6 font-mono text-[15px] leading-relaxed" aria-live="polite"></div>
+  </div>
+
+  <section class="prose-rr mx-auto mt-16 max-w-3xl space-y-4">
+    <h2 class="text-2xl font-bold text-white">How to write rap lyrics with this generator</h2>
+    <p>Use it to beat writer's block, not to replace your own voice. Generate a few verses, keep the bars that hit, and rewrite the rest with details from your own life. Each rhyme pair gets its own color, so you can see the AABB scheme and drop in your own lines without breaking it.</p>
+    <h2 class="text-2xl font-bold text-white">Styles</h2>
+    <p><strong class="text-zinc-200">Trap</strong> leans on money, ice and ad-libs. <strong class="text-zinc-200">Drill</strong> is colder, with street ad-libs. <strong class="text-zinc-200">Boom Bap</strong> sounds like golden-era lyricism. <strong class="text-zinc-200">Motivational</strong> is about the grind and rising up. A full song adds an intro and a hook between two 16-bar verses.</p>
+    <p>Need a stage name too? Try the <a href="/rap-name-generator" class="text-brand hover:underline">Rap Name Generator</a>.</p>
+  </section>
+
+  <Faq items={faq} />
+
+  <section class="mt-14">
+    <div class="mb-6 flex items-end justify-between">
+      <div>
+        <h2 class="text-2xl font-bold text-white">Want AI to write the whole song?</h2>
+        <p class="mt-1 text-zinc-400">These AI tools write the lyrics and make the beat and vocals too.</p>
+      </div>
+      <a href="/best/best-ai-rap-lyrics-generator" class="text-sm text-brand hover:underline">Best AI rap lyrics generators →</a>
+    </div>
+    <ToolGrid tools={related} />
+  </section>
+
+  <script>
+    import { generate, type Style } from '../lib/lyrics';
+
+    const COLORS = ['text-orange-400', 'text-sky-400', 'text-emerald-400', 'text-pink-400', 'text-yellow-300', 'text-violet-400', 'text-red-400', 'text-teal-300'];
+    const form = document.getElementById('gen') as HTMLFormElement;
+    const out = document.getElementById('out')!;
+    const copy = document.getElementById('copy')!;
+    let plain = '';
+
+    function render() {
+      const sections = generate({
+        topic: (document.getElementById('topic') as HTMLInputElement).value.replace(/[<>]/g, ''),
+        style: (document.getElementById('style') as HTMLSelectElement).value as Style,
+        length: (document.getElementById('length') as HTMLSelectElement).value as 'verse' | 'song',
+      });
+      const colorOf = new Map<string, string>();
+      out.replaceChildren(
+        ...sections.map((s) => {
+          const sec = document.createElement('div');
+          const h = document.createElement('p');
+          h.className = 'mb-2 text-xs font-sans font-semibold uppercase tracking-widest text-zinc-500';
+          h.textContent = `[${s.label}]`;
+          sec.append(h);
+          for (const line of s.lines) {
+            const p = document.createElement('p');
+            p.className = 'text-zinc-200';
+            // Color the rhyming end word (before any trailing ad-lib) by rhyme family.
+            const m = line.family ? line.text.match(/^(.*?)(\w[\w']*)(\W*(?:\([^)]*\))?)$/) : null;
+            if (m) {
+              if (!colorOf.has(line.family!)) colorOf.set(line.family!, COLORS[colorOf.size % COLORS.length]);
+              const end = document.createElement('span');
+              end.className = `font-bold ${colorOf.get(line.family!)}`;
+              end.textContent = m[2];
+              p.append(m[1], end, m[3]);
+            } else {
+              p.textContent = line.text;
+            }
+            sec.append(p);
+          }
+          return sec;
+        }),
+      );
+      plain = sections.map((s) => `[${s.label}]\n${s.lines.map((l) => l.text).join('\n')}`).join('\n\n');
+      copy.textContent = 'Copy lyrics';
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      render();
+    });
+    copy.addEventListener('click', () => {
+      navigator.clipboard?.writeText(plain);
+      copy.textContent = 'Copied!';
+    });
+    render();
+  </script>
+</Base>

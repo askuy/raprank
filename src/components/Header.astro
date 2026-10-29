@@ -1,0 +1,18 @@
+---
+const nav = [
+  { href: '/category', label: 'Categories' },
+  { href: '/best', label: 'Best Lists' },
+  { href: '/alternatives', label: 'Alternatives' },
+  { href: '/free-tools', label: 'Free Tools' },
+  { href: '/search', label: 'Search' },
+];
+---
+<header class="border-b border-zinc-800">
+  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
+    <a href="/" class="text-xl font-black tracking-tight text-white">Rap<span class="text-brand">Rank</span></a>
+    <nav class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-zinc-400">
+      {nav.map((n) => <a href={n.href} class="hover:text-white">{n.label}</a>)}
+      <a href="/submit" class="rounded-md border border-brand px-3 py-1 text-brand hover:bg-brand hover:text-zinc-950">Submit a tool</a>
+    </nav>
+  </div>
+</header>

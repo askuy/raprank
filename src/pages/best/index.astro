@@ -1,0 +1,18 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+const lists = await getCollection('lists');
+---
+<Base title="Best AI Rap & Music Video Tools: Ranked Lists" description="Ranked lists of the best AI rap video generators, music video makers, rap generators, rapper voices and lyric tools.">
+  <Breadcrumbs items={[{ name: 'Best Lists', href: '/best' }]} />
+  <h1 class="mb-8 text-4xl font-black text-white">Best-of lists</h1>
+  <div class="grid gap-4 md:grid-cols-2">
+    {lists.map((l) => (
+      <a href={`/best/${l.id}`} class="card hover:border-brand">
+        <p class="text-lg font-bold text-white">{l.data.title}</p>
+        <p class="mt-2 text-sm text-zinc-400">{l.data.description}</p>
+      </a>
+    ))}
+  </div>
+</Base>

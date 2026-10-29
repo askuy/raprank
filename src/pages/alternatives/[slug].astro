@@ -1,0 +1,38 @@
+---
+import { getEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CompareTable from '../../components/CompareTable.astro';
+import ToolGrid from '../../components/ToolGrid.astro';
+import { getAlternatives, getTools, pricingLabel } from '../../lib/data';
+import { breadcrumbSchema, itemListSchema } from '../../lib/schema';
+import { SITE } from '../../lib/site';
+
+export async function getStaticPaths() {
+  return (await getTools())
+    .filter((t) => t.data.alternativesPage)
+    .map((tool) => ({ params: { slug: tool.id }, props: { tool } }));
+}
+const { tool } = Astro.props;
+const d = tool.data;
+const alternatives = await getAlternatives(tool, 12);
+const category = (await getEntry(d.category))!;
+const title = `Best ${d.name} Alternatives (${new Date().getFullYear()})`;
+const crumbs = [{ name: 'Alternatives', href: '/alternatives' }, { name: `${d.name} alternatives`, href: `/alternatives/${tool.id}` }];
+---
+<Base
+  title={title}
+  description={`Looking for a ${d.name} alternative? Compare ${alternatives.length} ${category.data.name.toLowerCase()} and similar tools by pricing, free tier and features.`}
+  schema={[breadcrumbSchema(crumbs), itemListSchema(title, alternatives)]}
+>
+  <Breadcrumbs items={crumbs} />
+  <h1 class="text-4xl font-black text-white">{title}</h1>
+  <p class="mt-2 text-sm text-zinc-500">Updated {SITE.updated}</p>
+  <p class="mt-5 max-w-3xl text-lg text-zinc-400">
+    <a href={`/tool/${tool.id}`} class="text-brand hover:underline">{d.name}</a> ({pricingLabel(d.pricing).toLowerCase()}) {d.tagline.charAt(0).toLowerCase() + d.tagline.slice(1)}.
+    If its pricing, limits or output style don't suit you, these {alternatives.length} tools do similar jobs.
+  </p>
+  <h2 class="mb-4 mt-10 text-2xl font-bold text-white">{d.name} alternatives compared</h2>
+  <CompareTable tools={alternatives} />
+  <div class="mt-12"><ToolGrid tools={alternatives} ranked /></div>
+</Base>
