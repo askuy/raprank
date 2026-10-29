@@ -1,0 +1,244 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ToolIcon from '../../components/ToolIcon.astro';
+import Faq from '../../components/Faq.astro';
+import { battleTitle, getBattle, getBattles } from '../../lib/battles';
+import { outboundUrl, pricingLabel } from '../../lib/data';
+import { breadcrumbSchema, faqSchema } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  return (await getCollection('battles')).map((battle) => ({ params: { slug: battle.id }, props: { battle } }));
+}
+const { battle, a, b, rounds } = await getBattle(Astro.props.battle);
+const d = battle.data;
+const title = battleTitle(a, b);
+const others = (await getBattles()).filter((x) => x.battle.id !== battle.id);
+const crumbs = [{ name: 'Battles', href: '/battle' }, { name: title, href: `/battle/${battle.id}` }];
+const free = (t: typeof a) => t.data.freeTier ?? pricingLabel(t.data.pricing);
+const faq = [
+  {
+    q: `Is ${a.data.name} better than ${b.data.name}?`,
+    a: d.verdict ?? `It depends on what you're making. Play the blind test above with the same prompts in both tools and judge the output yourself. ${a.data.name}: ${a.data.tagline}. ${b.data.name}: ${b.data.tagline}.`,
+  },
+  { q: `Which has the better free plan, ${a.data.name} or ${b.data.name}?`, a: `${a.data.name}: ${free(a)}. ${b.data.name}: ${free(b)}.` },
+  { q: `How was this ${title} test done?`, a: `We ran the same prompt and settings in both tools, kept the first generation from each (no cherry-picking), and trimmed both to the same length. The prompt is shown above every round so you can repeat the test yourself.` },
+];
+const rows: [string, (t: typeof a) => string][] = [
+  ['Pricing', (t) => pricingLabel(t.data.pricing)],
+  ['Free plan / price', (t) => t.data.freeTier ?? '—'],
+  ['Best at', (t) => t.data.tagline],
+  ['Key features', (t) => t.data.features.slice(0, 4).join(' · ')],
+];
+---
+<Base
+  title={`${title}: Blind Test & Comparison`}
+  description={`${title} blind test. Same prompt in both tools, real ${d.mediaType === 'audio' ? 'songs' : 'videos'}, side by side. Plus pricing, free plans and features compared.`}
+  schema={[breadcrumbSchema(crumbs), faqSchema(faq)]}
+>
+  <Breadcrumbs items={crumbs} />
+
+  <!-- Stage: roast opener -->
+  <section id="stage" class="relative overflow-hidden rounded-2xl border border-zinc-800 bg-[radial-gradient(ellipse_at_20%_0%,rgba(249,115,22,.18),transparent_55%),radial-gradient(ellipse_at_80%_0%,rgba(56,189,248,.15),transparent_55%)] p-6 sm:p-10">
+    <div class="flex items-center justify-between">
+      <p class="font-mono text-xs uppercase tracking-[.3em] text-zinc-500">RapRank Battle · {d.date}</p>
+      <button id="mute" type="button" class="chip">🔊 Beat on</button>
+    </div>
+    <div class="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-4 text-center">
+      {[a, b].map((t, i) => (
+        <>
+          {i === 1 && <span class="text-5xl font-black italic text-brand drop-shadow-[0_0_20px_rgba(249,115,22,.6)] sm:text-7xl">VS</span>}
+          <div data-fighter={i ? 'b' : 'a'} class="fighter flex flex-col items-center gap-3">
+            <div class={`rounded-full p-1 ring-4 ${i ? 'ring-sky-400/40' : 'ring-brand/40'}`}><ToolIcon tool={t} size={88} /></div>
+            <p class="text-2xl font-black uppercase text-white sm:text-3xl">{t.data.name}</p>
+            <p class={`font-mono text-xs uppercase tracking-widest ${i ? 'text-sky-400' : 'text-brand'}`}>{pricingLabel(t.data.pricing)}</p>
+          </div>
+        </>
+      ))}
+    </div>
+    <h1 class="mt-8 text-center text-3xl font-black text-white sm:text-4xl">{title}: Blind Test</h1>
+    <p class="mx-auto mt-3 max-w-2xl text-center text-zinc-400">{d.intro}</p>
+    <div id="verse" class="mx-auto mt-8 min-h-[2rem] max-w-2xl space-y-1 font-mono text-[15px]"></div>
+    <div class="mt-6 text-center">
+      <button id="roast" type="button" class="btn text-lg">🎤 Start the roast</button>
+    </div>
+    <script type="application/json" id="roast-data" set:html={JSON.stringify({ a: { name: a.data.name, lines: d.roast.a }, b: { name: b.data.name, lines: d.roast.b } })} />
+  </section>
+
+  <!-- Blind rounds -->
+  <section class="mt-14 space-y-10">
+    {rounds.map((r, i) => (
+      <div class="round card" data-round={i} data-battle={battle.id}>
+        <div class="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 class="text-2xl font-bold text-white">Round {i + 1}: {r.title}</h2>
+          <p class="text-sm text-zinc-500">{d.mediaType === 'audio' ? '🎧 Listen to both' : '🎬 Watch both'}, then vote</p>
+        </div>
+        <details class="mt-4 rounded-lg border border-zinc-800 bg-zinc-950 p-4 text-sm" open>
+          <summary class="cursor-pointer font-semibold text-zinc-300">Prompt used in both tools</summary>
+          <p class="mt-2 font-mono text-zinc-300">“{r.prompt}”</p>
+          {r.inputs && <p class="mt-2 text-zinc-500">{r.inputs}</p>}
+        </details>
+        {r.ready ? (
+          <>
+            <div class="slots mt-6 grid gap-4 md:grid-cols-2">
+              {[{ t: a, s: r.a, k: 'a' }, { t: b, s: r.b, k: 'b' }].map(({ t, s, k }) => (
+                <div class="slot rounded-xl border border-zinc-800 bg-zinc-950 p-4" data-side={k} data-name={t.data.name} data-id={t.id}>
+                  <p class="label mb-3 font-bold text-white">Track ?</p>
+                  {d.mediaType === 'audio'
+                    ? <audio controls preload="none" src={s.media} class="w-full" />
+                    : <video controls preload="metadata" playsinline src={s.media} class="aspect-video w-full rounded-lg bg-black" />}
+                  <p class="reveal mt-3 hidden text-sm text-zinc-400">Made with <a href={`/tool/${t.id}`} class="font-semibold text-brand hover:underline">{t.data.name}</a>{s.note && ` · ${s.note}`}</p>
+                  <button type="button" class="vote btn mt-4 w-full justify-center">This one wins</button>
+                </div>
+              ))}
+            </div>
+            <p class="result mt-4 hidden text-center text-lg font-semibold text-white"></p>
+          </>
+        ) : (
+          <div class="mt-6 rounded-xl border border-dashed border-zinc-700 p-8 text-center text-zinc-500">
+            🎚️ Samples for this round are still being generated. Check back soon.
+          </div>
+        )}
+      </div>
+    ))}
+  </section>
+
+  <p id="scorecard" class="mt-8 hidden text-center text-2xl font-black text-white"></p>
+
+  <!-- Specs -->
+  <section class="mt-14">
+    <h2 class="mb-4 text-2xl font-bold text-white">{title}: specs compared</h2>
+    <div class="overflow-x-auto rounded-xl border border-zinc-800">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-zinc-900 text-zinc-400">
+          <tr><th class="p-3"></th>{[a, b].map((t) => <th class="p-3"><a href={`/tool/${t.id}`} class="flex items-center gap-2 text-white hover:text-brand"><ToolIcon tool={t} size={24} />{t.data.name}</a></th>)}</tr>
+        </thead>
+        <tbody class="divide-y divide-zinc-800">
+          {rows.map(([label, get]) => (
+            <tr><td class="p-3 text-zinc-500">{label}</td>{[a, b].map((t) => <td class="p-3 text-zinc-300">{get(t)}</td>)}</tr>
+          ))}
+          <tr><td class="p-3"></td>{[a, b].map((t) => <td class="p-3"><a href={outboundUrl(t)} target="_blank" rel="nofollow noopener sponsored" class="btn">Try {t.data.name} ↗</a></td>)}</tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <Faq items={faq} />
+
+  {others.length > 0 && (
+    <section class="mt-14">
+      <h2 class="mb-4 text-2xl font-bold text-white">More battles</h2>
+      <div class="flex flex-wrap gap-2">
+        {others.map((o) => <a href={`/battle/${o.battle.id}`} class="chip">{battleTitle(o.a, o.b)}</a>)}
+      </div>
+    </section>
+  )}
+
+  <style>
+    .fighter.live { animation: bounce 0.667s ease-in-out infinite; }
+    @keyframes bounce { 50% { transform: translateY(-8px) scale(1.04); } }
+    .caret::after { content: '▌'; color: #f97316; animation: blink 0.8s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+  </style>
+
+  <script>
+    import { setMuted, startBeat, stopBeat } from '../../lib/beat';
+
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const $ = (id: string) => document.getElementById(id)!;
+
+    // ---- Roast opener ----
+    const data = JSON.parse($('roast-data').textContent!) as Record<'a' | 'b', { name: string; lines: string[] }>;
+    let muted = false;
+    $('mute').addEventListener('click', () => {
+      muted = !muted;
+      setMuted(muted);
+      $('mute').textContent = muted ? '🔇 Beat off' : '🔊 Beat on';
+    });
+    async function typeLine(text: string, cls: string) {
+      const p = document.createElement('p');
+      p.className = `caret ${cls}`;
+      $('verse').append(p);
+      for (let i = 1; i <= text.length; i++) {
+        p.textContent = text.slice(0, i);
+        await sleep(24);
+      }
+      p.classList.remove('caret');
+    }
+    async function roast() {
+      const btn = $('roast') as HTMLButtonElement;
+      btn.disabled = true;
+      btn.textContent = '🎶 On the mic…';
+      startBeat();
+      $('verse').replaceChildren();
+      for (const side of ['a', 'b'] as const) {
+        const fighter = document.querySelector(`[data-fighter="${side}"]`)!;
+        fighter.classList.add('live');
+        const head = document.createElement('p');
+        head.className = `mt-4 text-xs font-bold uppercase tracking-widest ${side === 'a' ? 'text-brand' : 'text-sky-400'}`;
+        head.textContent = `🎤 ${data[side].name}`;
+        $('verse').append(head);
+        for (const line of data[side].lines) {
+          await typeLine(line, side === 'a' ? 'text-orange-200' : 'text-sky-200');
+          await sleep(350);
+        }
+        fighter.classList.remove('live');
+        await sleep(500);
+      }
+      stopBeat();
+      btn.disabled = false;
+      btn.textContent = '👇 Now judge the real tracks';
+      btn.onclick = () => document.querySelector('.round')?.scrollIntoView({ behavior: 'smooth' });
+    }
+    $('roast').addEventListener('click', roast, { once: true });
+
+    // ---- Blind rounds: shuffle sides, hide names until the vote ----
+    const rounds = [...document.querySelectorAll<HTMLElement>('.round')].filter((r) => r.querySelector('.slots'));
+    const key = (r: HTMLElement) => `rr-battle:${r.dataset.battle}:${r.dataset.round}`;
+
+    function reveal(round: HTMLElement, winnerId: string) {
+      round.querySelectorAll<HTMLElement>('.slot').forEach((s) => {
+        s.querySelector('.reveal')!.classList.remove('hidden');
+        s.querySelector('.vote')!.remove();
+        const won = s.dataset.id === winnerId;
+        s.classList.add(won ? 'border-brand' : 'opacity-70');
+        if (won) s.querySelector('.label')!.textContent += ' 🏆';
+      });
+      const winner = round.querySelector<HTMLElement>(`.slot[data-id="${winnerId}"]`)!;
+      const res = round.querySelector('.result')!;
+      res.textContent = `You picked ${winner.dataset.name}.`;
+      res.classList.remove('hidden');
+      score();
+    }
+
+    function score() {
+      const picks = rounds.map((r) => localStorage.getItem(key(r))).filter(Boolean) as string[];
+      if (picks.length < rounds.length || rounds.length === 0) return;
+      const names = Object.fromEntries([...document.querySelectorAll<HTMLElement>('.slot')].map((s) => [s.dataset.id, s.dataset.name]));
+      const ids = [...new Set(Object.keys(names))];
+      const tally = ids.map((id) => `${names[id]} ${picks.filter((p) => p === id).length}`).join(' – ');
+      const card = $('scorecard');
+      card.textContent = `Your scorecard: ${tally}`;
+      card.classList.remove('hidden');
+    }
+
+    for (const round of rounds) {
+      const slots = round.querySelector('.slots')!;
+      const items = [...slots.children] as HTMLElement[];
+      if (Math.random() < 0.5) slots.append(items[0]);
+      [...slots.children].forEach((s, i) => (s.querySelector('.label')!.textContent = `Track ${i + 1}`));
+      const saved = localStorage.getItem(key(round));
+      if (saved) {
+        reveal(round, saved);
+        continue;
+      }
+      round.querySelectorAll<HTMLElement>('.slot').forEach((s) =>
+        s.querySelector('.vote')!.addEventListener('click', () => {
+          localStorage.setItem(key(round), s.dataset.id!);
+          reveal(round, s.dataset.id!);
+        }),
+      );
+    }
+  </script>
+</Base>

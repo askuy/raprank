@@ -1,0 +1,1165 @@
+// Generated from src/data/tools.json (verified tools only).
+window.TOOLS = [
+ {
+  "id": "freebeat",
+  "name": "Freebeat",
+  "url": "https://freebeat.ai",
+  "category": "ai-music-video",
+  "tags": [
+   "beat-sync",
+   "lip-sync",
+   "lyric-sync"
+  ],
+  "tagline": "Makes beat-synced music videos from your song, with story, dance, stage and lyric modes",
+  "features": [
+   "Beat/BPM-synced visuals",
+   "Lip-sync and dance videos",
+   "Karaoke-style lyric sync",
+   "Imports from Spotify, SoundCloud, Suno, Udio links",
+   "Free rap lyrics generator"
+  ],
+  "pricing": "freemium",
+  "freeTier": "500 credits; Basic $4.99/wk, Standard $9.99/mo, Pro $24.99/mo",
+  "featured": true,
+  "categoryName": "AI Music Video Generators",
+  "domain": "freebeat.ai"
+ },
+ {
+  "id": "solmi",
+  "name": "Solmi",
+  "url": "https://solmi.ai",
+  "category": "ai-music-video",
+  "tags": [
+   "lip-sync",
+   "lyric-sync"
+  ],
+  "tagline": "AI music video maker with lip-synced vocals and a storyboard you can edit before rendering",
+  "features": [
+   "Lip-synced vocals",
+   "Lyric detection in 14 languages",
+   "Storyboard you can edit first",
+   "Full-song videos"
+  ],
+  "pricing": "freemium",
+  "freeTier": "1 short 480p watermarked video + 10 song credits/day; Plus $35/mo",
+  "featured": null,
+  "categoryName": "AI Music Video Generators",
+  "domain": "solmi.ai"
+ },
+ {
+  "id": "neural-frames",
+  "name": "Neural Frames",
+  "url": "https://www.neuralframes.com",
+  "category": "ai-music-video",
+  "tags": [
+   "beat-sync"
+  ],
+  "tagline": "Audio-reactive music videos that react to each of 8 separated stems, exported in 4K",
+  "features": [
+   "Reacts to 8 separate stems",
+   "Autopilot and frame-by-frame editor",
+   "Kling, Seedance and Runway models",
+   "Train custom characters",
+   "Free 4K upscaling"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free start; paid plans reported from ~$39/mo",
+  "featured": true,
+  "categoryName": "AI Music Video Generators",
+  "domain": "neuralframes.com"
+ },
+ {
+  "id": "airapgen",
+  "name": "AIRapGen",
+  "url": "https://www.airapgen.com",
+  "category": "ai-rap-song",
+  "tags": [
+   "photo-to-video",
+   "lip-sync",
+   "commercial-license"
+  ],
+  "tagline": "Generates full rap songs and beats from text, plus lip-synced rap videos from one photo",
+  "features": [
+   "Trap, drill, boom bap and lo-fi",
+   "Tracks up to 8 minutes",
+   "Photo-to-rap video with lip-sync",
+   "Vocal removal and audio-to-MIDI",
+   "Commercial license on paid plans"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Daily free generations",
+  "featured": true,
+  "categoryName": "AI Rap Song Generators",
+  "domain": "airapgen.com"
+ },
+ {
+  "id": "higgsfield-rap-god",
+  "name": "Higgsfield Rap God",
+  "url": "https://higgsfield.ai/apps/rapgod",
+  "category": "ai-rap-video",
+  "tags": [
+   "photo-to-video",
+   "lip-sync"
+  ],
+  "tagline": "Higgsfield effect that turns your photo into a viral-style AI rap music video",
+  "features": [
+   "One-tap rap video effect",
+   "Genjutsu face-swap into rap clips",
+   "Rap Flex camera motion preset",
+   "Speak lip-sync tool"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free account, watermarked, limited models; paid plans from ~$9/mo (reported)",
+  "featured": true,
+  "categoryName": "AI Rap Video Generators",
+  "domain": "higgsfield.ai"
+ },
+ {
+  "id": "veed-ai-music-video",
+  "name": "VEED AI Music Video Generator",
+  "url": "https://www.veed.io/tools/ai-video/ai-music-video-generator",
+  "category": "ai-music-video",
+  "tags": [
+   "lyric-sync",
+   "photo-to-video"
+  ],
+  "tagline": "Prompt-to-music-video clips inside VEED's online editor, using several video models",
+  "features": [
+   "Veo 3, Kling, Sora and Hailuo models",
+   "Upload a song or a photo",
+   "Lyric video maker",
+   "Full editor for captions and edits"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free plan; uploaded audio trimmed to 5s",
+  "featured": null,
+  "categoryName": "AI Music Video Generators",
+  "domain": "veed.io"
+ },
+ {
+  "id": "flyu",
+  "name": "FlyU",
+  "url": "https://flyu.ai",
+  "category": "ai-rap-video",
+  "tags": [
+   "lyric-sync",
+   "lip-sync",
+   "photo-to-video"
+  ],
+  "tagline": "Turns rap tracks into music videos with lyric sync that keeps up with fast flows",
+  "features": [
+   "Lyric sync up to 12 syllables/sec",
+   "Punchline impact effects",
+   "Photo-to-character mode",
+   "Story, Concert and Lip-Sync modes",
+   "Pro Mode up to 4 minutes"
+  ],
+  "pricing": "freemium",
+  "freeTier": "One free 15s Lite Mode video",
+  "featured": true,
+  "categoryName": "AI Rap Video Generators",
+  "domain": "flyu.ai"
+ },
+ {
+  "id": "rapai",
+  "name": "Rap AI (rapai.io)",
+  "url": "https://rapai.io",
+  "category": "ai-rap-song",
+  "tags": [
+   "commercial-license"
+  ],
+  "tagline": "Makes full rap songs from a topic or your own bars and gives you two versions to compare",
+  "features": [
+   "Trap, drill, boom bap and melodic styles",
+   "Tempo, energy and mood controls",
+   "Two versions per generation",
+   "Commercial rights on paid plans"
+  ],
+  "pricing": "freemium",
+  "freeTier": "3 generations/day; no downloads on free",
+  "featured": null,
+  "categoryName": "AI Rap Song Generators",
+  "domain": "rapai.io"
+ },
+ {
+  "id": "ai-rap-creator",
+  "name": "AI Rap Creator",
+  "url": "https://airapcreator.com",
+  "category": "ai-rap-song",
+  "tags": [],
+  "tagline": "Writes rap lyrics first so you can edit them, then makes the full MP3 track",
+  "features": [
+   "8 rap styles",
+   "Edit lyrics before audio",
+   "Beat and vocal generation",
+   "MP3 download",
+   "Credit packs or subscription"
+  ],
+  "pricing": "freemium",
+  "freeTier": "10 credits (about 1 song) with Google sign-in",
+  "featured": null,
+  "categoryName": "AI Rap Song Generators",
+  "domain": "airapcreator.com"
+ },
+ {
+  "id": "ai-diss-track-generator",
+  "name": "DissTrack AI",
+  "url": "https://aidisstrackgenerator.com",
+  "category": "ai-rap-song",
+  "tags": [
+   "diss-track"
+  ],
+  "tagline": "Makes a personalized diss track about a friend or rival in about 30 seconds",
+  "features": [
+   "Input target name and roast facts",
+   "Trap, battle and boom bap styles",
+   "Adjustable attitude level",
+   "Free rap lyrics generator"
+  ],
+  "pricing": "freemium",
+  "freeTier": "1 free track; Pro $9.99/mo, Creator $29.99/mo",
+  "featured": null,
+  "categoryName": "AI Rap Song Generators",
+  "domain": "aidisstrackgenerator.com"
+ },
+ {
+  "id": "rhymeflux",
+  "name": "RhymeFlux",
+  "url": "https://rhymeflux.com",
+  "category": "ai-rap-lyrics",
+  "tags": [
+   "mobile-app"
+  ],
+  "tagline": "Rap writing app that colors your rhymes live and has an AI co-writer",
+  "features": [
+   "Live rhyme color highlighting",
+   "Slant rhyme detection",
+   "Syllable count for each bar",
+   "AI co-writer for trap, drill and lyrical styles",
+   "iOS, Android and web"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Limited songs + 15 AI credits/30 days; Pro $15/mo",
+  "featured": null,
+  "categoryName": "AI Rap Lyrics Generators",
+  "domain": "rhymeflux.com"
+ },
+ {
+  "id": "beatviz",
+  "name": "BeatViz",
+  "url": "https://beatviz.ai",
+  "category": "ai-music-video",
+  "tags": [
+   "beat-sync",
+   "lip-sync"
+  ],
+  "tagline": "AI director agent that turns full songs into multi-scene music videos you edit by chatting",
+  "features": [
+   "BPM and mood analysis",
+   "Edits through chat",
+   "Scene-by-scene regeneration",
+   "Lip sync",
+   "Motion transfer"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free with watermark; paid reported ~$25.9/mo",
+  "featured": null,
+  "categoryName": "AI Music Video Generators",
+  "domain": "beatviz.ai"
+ },
+ {
+  "id": "musvideo",
+  "name": "MusVideo",
+  "url": "https://musvideo.ai",
+  "category": "ai-music-video",
+  "tags": [
+   "beat-sync",
+   "lyric-sync"
+  ],
+  "tagline": "Upload an MP3 and get a storyboarded music video timed to the beat, up to 4 minutes",
+  "features": [
+   "Auto storyboard from tempo and mood",
+   "Lyric video mode",
+   "HD up to 4 minutes",
+   "Multi-format social exports",
+   "Text-to-music tools"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free trial credits",
+  "featured": null,
+  "categoryName": "AI Music Video Generators",
+  "domain": "musvideo.ai"
+ },
+ {
+  "id": "suno",
+  "name": "Suno",
+  "url": "https://suno.com",
+  "category": "ai-music-generator",
+  "tags": [
+   "free",
+   "commercial-license"
+  ],
+  "tagline": "Leading text-to-song generator that makes full tracks with vocals, rap included",
+  "features": [
+   "Full songs with vocals",
+   "Custom lyrics mode",
+   "Upload to extend or remix",
+   "Suno Studio on Premier",
+   "Pro $10/mo with commercial rights"
+  ],
+  "pricing": "freemium",
+  "freeTier": "50 credits/day (~10 songs), no commercial use",
+  "featured": true,
+  "categoryName": "AI Music Generators",
+  "domain": "suno.com"
+ },
+ {
+  "id": "udio",
+  "name": "Udio",
+  "url": "https://www.udio.com",
+  "category": "ai-music-generator",
+  "tags": [
+   "free"
+  ],
+  "tagline": "Suno rival known for polished mixes; downloads reportedly disabled since late 2025",
+  "features": [
+   "Full songs with vocals",
+   "Extend and remix",
+   "Inpainting",
+   "Standard $10/mo, Pro $30/mo"
+  ],
+  "pricing": "freemium",
+  "freeTier": "10 credits/day + 100/mo pool",
+  "featured": null,
+  "categoryName": "AI Music Generators",
+  "domain": "udio.com"
+ },
+ {
+  "id": "kaiber",
+  "name": "Kaiber",
+  "url": "https://kaiber.ai",
+  "category": "ai-music-video",
+  "tags": [
+   "beat-sync"
+  ],
+  "tagline": "Superstudio canvas for stylized, audio-reactive visuals that pulse with your track",
+  "features": [
+   "Audio-reactive Beat Sync",
+   "Canvas workspace",
+   "Kling, Luma, Veo and Runway models",
+   "Flipbook up to 8 minutes",
+   "Topaz 4K upscale"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Reported 50 free credits; Creator ~$29/mo",
+  "featured": null,
+  "categoryName": "AI Music Video Generators",
+  "domain": "kaiber.ai"
+ },
+ {
+  "id": "viggle",
+  "name": "Viggle",
+  "url": "https://viggle.ai",
+  "category": "ai-rap-video",
+  "tags": [
+   "photo-to-video",
+   "lip-sync",
+   "mobile-app",
+   "free"
+  ],
+  "tagline": "Make any photo rap, lip-sync or dance with the Rap, Mic and Mix tools",
+  "features": [
+   "Rap from a single photo",
+   "Mic lip-sync from audio or text",
+   "Mix motion transfer",
+   "8,000+ motion templates",
+   "Mobile apps"
+  ],
+  "pricing": "freemium",
+  "freeTier": "5 videos/day with watermark; Pro $7.99/mo",
+  "featured": true,
+  "categoryName": "AI Rap Video Generators",
+  "domain": "viggle.ai"
+ },
+ {
+  "id": "revocalize",
+  "name": "Revocalize AI",
+  "url": "https://www.revocalize.ai",
+  "category": "ai-rapper-voice",
+  "tags": [
+   "voice-cloning",
+   "api"
+  ],
+  "tagline": "Voice-to-voice conversion with licensed artist models and a plugin for your DAW",
+  "features": [
+   "Voice-to-voice conversion",
+   "Licensed artist voice models",
+   "VST/AU plugin for DAWs",
+   "Real-time auto-tune",
+   "Python API"
+  ],
+  "pricing": "freemium",
+  "freeTier": "5 conversion min/mo, 1 starter voice; Starter $9/mo",
+  "featured": null,
+  "categoryName": "AI Rapper Voice Generators",
+  "domain": "revocalize.ai"
+ },
+ {
+  "id": "uberduck",
+  "name": "Uberduck",
+  "url": "https://www.uberduck.ai",
+  "category": "ai-rapper-voice",
+  "tags": [
+   "voice-cloning"
+  ],
+  "tagline": "Pick a beat, generate lyrics, and get AI rap vocals from text",
+  "features": [
+   "Text-to-rap vocals",
+   "AI song generator with lyrics",
+   "Voice cloning",
+   "Speech-to-speech",
+   "25+ languages"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free tier; Starter $2/mo billed yearly (1,000 credits)",
+  "featured": null,
+  "categoryName": "AI Rapper Voice Generators",
+  "domain": "uberduck.ai"
+ },
+ {
+  "id": "topmediai",
+  "name": "TopMediai",
+  "url": "https://www.topmediai.com",
+  "category": "ai-rapper-voice",
+  "tags": [
+   "voice-cloning"
+  ],
+  "tagline": "Suite with a rapper voice generator, rap song maker and AI music video maker",
+  "features": [
+   "Rapper text-to-speech",
+   "Voice cloning",
+   "Rap lyrics and beat maker",
+   "Audio-to-music-video",
+   "Stem split and MIDI extraction"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Limited trial credits per tool; from $4.99/wk or $8.99/mo",
+  "featured": null,
+  "categoryName": "AI Rapper Voice Generators",
+  "domain": "topmediai.com"
+ },
+ {
+  "id": "musicful",
+  "name": "Musicful",
+  "url": "https://www.musicful.ai",
+  "category": "ai-rap-song",
+  "tags": [],
+  "tagline": "Turns a topic, your bars or a recorded freestyle into a full rap song",
+  "features": [
+   "Text-to-rap",
+   "Fast rap generator",
+   "Rap lyrics generator",
+   "12-stem splitter",
+   "MIDI/WAV/MP3 export"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free to start",
+  "featured": null,
+  "categoryName": "AI Rap Song Generators",
+  "domain": "musicful.ai"
+ },
+ {
+  "id": "rapchat",
+  "name": "Rapchat",
+  "url": "https://rapchat.com",
+  "category": "ai-rap-song",
+  "tags": [
+   "mobile-app",
+   "free"
+  ],
+  "tagline": "Mobile rap studio with 400K+ beats, AI vocal tuning and auto-mastering",
+  "features": [
+   "400K+ producer beats",
+   "AI vocal tune presets",
+   "Multitrack recording",
+   "Auto-mastering",
+   "Verse challenges and charts"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free app; Rapchat Gold upgrade",
+  "featured": null,
+  "categoryName": "AI Rap Song Generators",
+  "domain": "rapchat.com"
+ },
+ {
+  "id": "revid-ai-hip-hop",
+  "name": "Revid.ai Hip Hop Video Generator",
+  "url": "https://www.revid.ai/tools/ai-hip-hop-video-generator",
+  "category": "ai-rap-video",
+  "tags": [
+   "lyric-sync"
+  ],
+  "tagline": "Paste rap lyrics and get a beat, vocals and street-style visuals in one video",
+  "features": [
+   "Lyrics with [verse]/[chorus] tags",
+   "Styles like West Coast, trap and drill",
+   "Beat and vocal generation",
+   "Caption and mix editor",
+   "Exports for TikTok and Shorts"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free trial credits, no card; Growth $39/mo ($32/mo yearly)",
+  "featured": null,
+  "categoryName": "AI Rap Video Generators",
+  "domain": "revid.ai"
+ },
+ {
+  "id": "aituber-rap-video",
+  "name": "AITuber AI Rap Video Generator",
+  "url": "https://aituber.app/tools/ai-rap-video-generator/",
+  "category": "ai-rap-video",
+  "tags": [
+   "lyric-sync",
+   "beat-sync"
+  ],
+  "tagline": "Beat-synced rap visuals with lyric overlays, from an AI track or your own",
+  "features": [
+   "Generate a rap or upload one",
+   "Urban, anime and cinematic styles",
+   "Lyric overlays",
+   "9:16, 16:9 and 1:1 exports"
+  ],
+  "pricing": "freemium",
+  "freeTier": "100 free credits on signup; Creator $39/mo",
+  "featured": null,
+  "categoryName": "AI Rap Video Generators",
+  "domain": "aituber.app"
+ },
+ {
+  "id": "sunomv-rap",
+  "name": "SunoMV Rap Generator",
+  "url": "https://suno.bi/rap",
+  "category": "ai-rap-video",
+  "tags": [
+   "lyric-sync",
+   "no-signup",
+   "diss-track"
+  ],
+  "tagline": "Turns a link, text or audio into a rap song with a lyric video",
+  "features": [
+   "Input from a link, text or audio",
+   "4 rap styles including diss and battle",
+   "Lyric video output",
+   "Character-swap templates"
+  ],
+  "pricing": "freemium",
+  "freeTier": "2 raps/day without an account",
+  "featured": null,
+  "categoryName": "AI Rap Video Generators",
+  "domain": "suno.bi"
+ },
+ {
+  "id": "airmusic",
+  "name": "AirMusic Rap Video Maker",
+  "url": "https://airmusic.ai/rap-video-maker",
+  "category": "ai-rap-video",
+  "tags": [
+   "beat-sync"
+  ],
+  "tagline": "Rap-style AI visuals guided by your track, plus a rapper voice generator",
+  "features": [
+   "Visuals guided by your audio",
+   "Trap, drill and boom bap vocals",
+   "Multilingual rap voices",
+   "Rapper voice generator"
+  ],
+  "pricing": "freemium",
+  "freeTier": "25 free credits; Starter $11.90/mo",
+  "featured": null,
+  "categoryName": "AI Rap Video Generators",
+  "domain": "airmusic.ai"
+ },
+ {
+  "id": "rap-ai-music-video-maker-app",
+  "name": "Rap AI: AI Music Video Maker (app)",
+  "url": "https://apps.apple.com/us/app/ai-music-video-maker-rap-ai/id6736348641",
+  "category": "ai-rap-video",
+  "tags": [
+   "mobile-app",
+   "lip-sync"
+  ],
+  "tagline": "Mobile app that turns typed lyrics into lip-synced AI rap music videos",
+  "features": [
+   "200+ voices",
+   "100+ genres",
+   "Auto lip-sync",
+   "Veo 3.1 and Sora 2 video",
+   "iOS and Android"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free download; Premium $3.99/wk or $29.99/yr",
+  "featured": null,
+  "categoryName": "AI Rap Video Generators",
+  "domain": "apps.apple.com"
+ },
+ {
+  "id": "vidmuse",
+  "name": "VidMuse",
+  "url": "https://vidmuse.ai",
+  "category": "ai-music-video",
+  "tags": [
+   "beat-sync"
+  ],
+  "tagline": "AI agent that storyboards and renders a beat-matched music video from your song",
+  "features": [
+   "Reads lyrics and mood",
+   "Staged storyboard workflow",
+   "Seedance, Kling, Veo and Sora models",
+   "Suno built in",
+   "Story and performance templates"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free credits; reported $39/mo paid",
+  "featured": null,
+  "categoryName": "AI Music Video Generators",
+  "domain": "vidmuse.ai"
+ },
+ {
+  "id": "longstories",
+  "name": "LongStories.ai",
+  "url": "https://longstories.ai",
+  "category": "ai-music-video",
+  "tags": [],
+  "tagline": "Story-driven music videos up to 15 minutes with characters that stay consistent",
+  "features": [
+   "Up to 15-minute videos",
+   "Universe consistent characters",
+   "Concert, lyric and cinematic styles",
+   "Can generate the song too"
+  ],
+  "pricing": "paid",
+  "freeTier": "Character creation free; videos from $59/mo",
+  "featured": null,
+  "categoryName": "AI Music Video Generators",
+  "domain": "longstories.ai"
+ },
+ {
+  "id": "one-more-shot",
+  "name": "One More Shot",
+  "url": "https://www.onemoreshot.ai",
+  "category": "ai-music-video",
+  "tags": [
+   "lip-sync",
+   "mobile-app"
+  ],
+  "tagline": "Lip-synced AI music videos from Suno or Udio tracks for TikTok, Reels and Shorts",
+  "features": [
+   "Lip-synced performances",
+   "Pay per second (~$0.05/s)",
+   "iOS, Android and web",
+   "Flux, Seedream and Sora 2"
+  ],
+  "pricing": "freemium",
+  "freeTier": "First video free, HD, no watermark",
+  "featured": null,
+  "categoryName": "AI Music Video Generators",
+  "domain": "onemoreshot.ai"
+ },
+ {
+  "id": "renderforest",
+  "name": "Renderforest",
+  "url": "https://www.renderforest.com",
+  "category": "ai-music-video",
+  "tags": [
+   "lyric-sync"
+  ],
+  "tagline": "Online video platform with AI music video and visualizer templates",
+  "features": [
+   "Music visualizer templates",
+   "AI video generation",
+   "Lyric video templates",
+   "Browser-based editor"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free plan: watermarked 720p, 3-min videos; Lite from ~$8/mo yearly",
+  "featured": null,
+  "categoryName": "AI Music Video Generators",
+  "domain": "renderforest.com"
+ },
+ {
+  "id": "hedra",
+  "name": "Hedra",
+  "url": "https://www.hedra.com",
+  "category": "lip-sync-avatar",
+  "tags": [
+   "lip-sync",
+   "photo-to-video",
+   "api"
+  ],
+  "tagline": "Character-3 model animates a talking or singing avatar from an image and audio",
+  "features": [
+   "Image + audio to performance",
+   "Expressive lip-sync",
+   "Text prompts",
+   "API"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free start, watermarked; Basic ~$20/mo (reported)",
+  "featured": null,
+  "categoryName": "Lip-Sync & Avatar Tools",
+  "domain": "hedra.com"
+ },
+ {
+  "id": "sync-so",
+  "name": "Sync.so",
+  "url": "https://sync.so",
+  "category": "lip-sync-avatar",
+  "tags": [
+   "lip-sync",
+   "api"
+  ],
+  "tagline": "Studio-grade lip-sync API for re-syncing performers to new vocals",
+  "features": [
+   "Lip-sync up to native 4K",
+   "Visual dubbing",
+   "API access"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free trial; Hobbyist $5/mo + $0.05/sec",
+  "featured": null,
+  "categoryName": "Lip-Sync & Avatar Tools",
+  "domain": "sync.so"
+ },
+ {
+  "id": "runway",
+  "name": "Runway",
+  "url": "https://runwayml.com",
+  "category": "ai-video-models",
+  "tags": [
+   "api"
+  ],
+  "tagline": "High-end AI video shots for building cinematic music video scenes",
+  "features": [
+   "Text and image to video",
+   "Gen-4 models",
+   "Editing tools",
+   "API"
+  ],
+  "pricing": "freemium",
+  "freeTier": "125 one-time credits; Standard $15/mo ($12/mo yearly)",
+  "featured": null,
+  "categoryName": "AI Video Models",
+  "domain": "runwayml.com"
+ },
+ {
+  "id": "kling-ai",
+  "name": "Kling AI",
+  "url": "https://klingai.com",
+  "category": "ai-video-models",
+  "tags": [
+   "lip-sync"
+  ],
+  "tagline": "Low-cost text and image to video model popular for music video shots",
+  "features": [
+   "Text/image to video",
+   "1080p/30fps",
+   "Lip-sync",
+   "Low-cost plans"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free credits (720p, watermark); Standard ~$8.80/mo",
+  "featured": null,
+  "categoryName": "AI Video Models",
+  "domain": "klingai.com"
+ },
+ {
+  "id": "luma-dream-machine",
+  "name": "Luma Dream Machine",
+  "url": "https://lumalabs.ai/dream-machine",
+  "category": "ai-video-models",
+  "tags": [],
+  "tagline": "High-quality text-to-video for stylized visuals in music videos",
+  "features": [
+   "Text to video",
+   "Image to video",
+   "Camera controls"
+  ],
+  "pricing": "paid",
+  "freeTier": "No free plan listed; Plus $30/mo ($25/mo yearly)",
+  "featured": null,
+  "categoryName": "AI Video Models",
+  "domain": "lumalabs.ai"
+ },
+ {
+  "id": "tad-ai",
+  "name": "Tad AI Rap Generator",
+  "url": "https://tad.ai/ai-rap-generator",
+  "category": "ai-rap-song",
+  "tags": [],
+  "tagline": "Makes a full rap song with beat and vocals from a short prompt",
+  "features": [
+   "Smart and Custom modes",
+   "Trap, drill, boom bap and lo-fi",
+   "Lyrics, beat and vocals"
+  ],
+  "pricing": "freemium",
+  "freeTier": "21 credits (~2 songs); Standard $7.99/mo",
+  "featured": null,
+  "categoryName": "AI Rap Song Generators",
+  "domain": "tad.ai"
+ },
+ {
+  "id": "insmelo",
+  "name": "InsMelo",
+  "url": "https://insmelo.com/music-genre-generator/rap",
+  "category": "ai-rap-song",
+  "tags": [],
+  "tagline": "Text or lyrics to rap tracks with beats, vocals and selectable flows",
+  "features": [
+   "Text/lyrics to rap",
+   "Custom styles",
+   "Beat and vocals"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Small free credit allowance; Pro ~$16.99/mo",
+  "featured": null,
+  "categoryName": "AI Rap Song Generators",
+  "domain": "insmelo.com"
+ },
+ {
+  "id": "musiccreator-ai",
+  "name": "MusicCreator AI",
+  "url": "https://www.musiccreator.ai/ai-rap-generator",
+  "category": "ai-rap-song",
+  "tags": [],
+  "tagline": "Free AI rap maker for lyrics, vocals and instrumental in 10+ languages",
+  "features": [
+   "Topic-to-rap",
+   "AI vocals",
+   "Instrumental generation",
+   "10+ languages"
+  ],
+  "pricing": "freemium",
+  "freeTier": "30 credits/yr (15 songs); Starter $10.49/mo",
+  "featured": null,
+  "categoryName": "AI Rap Song Generators",
+  "domain": "musiccreator.ai"
+ },
+ {
+  "id": "openmusic-ai",
+  "name": "OpenMusic AI",
+  "url": "https://www.openmusic.ai/ai-rap-generator",
+  "category": "ai-rap-song",
+  "tags": [],
+  "tagline": "Makes full rap tracks with lyrics, vocals and beat",
+  "features": [
+   "Lyrics generation",
+   "Rap vocals",
+   "Instrumentals"
+  ],
+  "pricing": "freemium",
+  "freeTier": "30 credits/yr (15 songs); Starter $10.49/mo",
+  "featured": null,
+  "categoryName": "AI Rap Song Generators",
+  "domain": "openmusic.ai"
+ },
+ {
+  "id": "kapwing-rap",
+  "name": "Kapwing AI Rap Song Generator",
+  "url": "https://www.kapwing.com/ai/generator/audio/song/rap",
+  "category": "ai-rap-song",
+  "tags": [],
+  "tagline": "Shape a rap song by chatting with an AI assistant inside Kapwing",
+  "features": [
+   "Chat-based song shaping",
+   "Upload your own lyrics",
+   "Tempo and rhyme tweaks",
+   "Kapwing video editor"
+  ],
+  "pricing": "freemium",
+  "freeTier": "10 credits, watermarked 720p; Pro $16/mo",
+  "featured": null,
+  "categoryName": "AI Rap Song Generators",
+  "domain": "kapwing.com"
+ },
+ {
+  "id": "musick-ai",
+  "name": "Musick AI",
+  "url": "https://musick.ai/generator/rap",
+  "category": "ai-rap-song",
+  "tags": [],
+  "tagline": "AI rap song builder that also writes bars and freestyles",
+  "features": [
+   "Full rap songs",
+   "Bar generator",
+   "Freestyle mode"
+  ],
+  "pricing": "freemium",
+  "freeTier": "1 generation/day, no downloads; Basic $6.99/mo",
+  "featured": null,
+  "categoryName": "AI Rap Song Generators",
+  "domain": "musick.ai"
+ },
+ {
+  "id": "rapgenerator-ai",
+  "name": "RapGenerator.ai",
+  "url": "https://rapgenerator.ai",
+  "category": "ai-rap-lyrics",
+  "tags": [
+   "free",
+   "no-signup"
+  ],
+  "tagline": "No-signup AI writer for verses, hooks, freestyles and full rap songs",
+  "features": [
+   "Verses and hooks",
+   "Freestyles",
+   "Lyric analysis",
+   "Templates and export"
+  ],
+  "pricing": "free",
+  "freeTier": "No signup required",
+  "featured": null,
+  "categoryName": "AI Rap Lyrics Generators",
+  "domain": "rapgenerator.ai"
+ },
+ {
+  "id": "word-studio-rap",
+  "name": "Word.Studio Rap Generator",
+  "url": "https://word.studio/tool/rap-generator/",
+  "category": "ai-rap-lyrics",
+  "tags": [],
+  "tagline": "Rap lyrics from your stage name, topic and musical influence",
+  "features": [
+   "Stage name input",
+   "Topic prompt",
+   "Pick an influence"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Guests: basic tools 3x/day; Starter $7/mo",
+  "featured": null,
+  "categoryName": "AI Rap Lyrics Generators",
+  "domain": "word.studio"
+ },
+ {
+  "id": "neume",
+  "name": "Neume",
+  "url": "https://neume.io/lyrics-generator/rap",
+  "category": "ai-rap-lyrics",
+  "tags": [],
+  "tagline": "Rap lyrics you can control by rhyme scheme, then produced over a beat",
+  "features": [
+   "Choose rhyme schemes like AABB or multis",
+   "Verses that keep a theme",
+   "Rap song generator"
+  ],
+  "pricing": "freemium",
+  "freeTier": "First song free; packs from $4.99/10 songs",
+  "featured": null,
+  "categoryName": "AI Rap Lyrics Generators",
+  "domain": "neume.io"
+ },
+ {
+  "id": "lyricsgenerator-io",
+  "name": "LyricsGenerator.io",
+  "url": "https://lyricsgenerator.io/rap-generator",
+  "category": "ai-rap-lyrics",
+  "tags": [],
+  "tagline": "Quick AI rap lyric writer with a limited free quota",
+  "features": [
+   "Rap lyrics",
+   "Multiple genres",
+   "Fast output"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Limited free generations",
+  "featured": null,
+  "categoryName": "AI Rap Lyrics Generators",
+  "domain": "lyricsgenerator.io"
+ },
+ {
+  "id": "easy-peasy-rap-lyrics",
+  "name": "Easy-Peasy.AI Rap Lyrics",
+  "url": "https://easy-peasy.ai/templates/rap-lyrics-generator",
+  "category": "ai-rap-lyrics",
+  "tags": [],
+  "tagline": "Rap lyrics template using topic, mood and an optional artist influence",
+  "features": [
+   "Topic and mood inputs",
+   "Artist-style inspiration",
+   "Part of a larger AI suite"
+  ],
+  "pricing": "freemium",
+  "freeTier": "1,000 words + limited credits; Starter $8/mo yearly",
+  "featured": null,
+  "categoryName": "AI Rap Lyrics Generators",
+  "domain": "easy-peasy.ai"
+ },
+ {
+  "id": "aifreebox-rap-lyrics",
+  "name": "AIFreeBox Rap Lyrics",
+  "url": "https://aifreebox.com/list/ai-rap-lyrics-generator",
+  "category": "ai-rap-lyrics",
+  "tags": [
+   "free",
+   "no-signup"
+  ],
+  "tagline": "Free rap lyric generator covering 33+ languages and 15+ rap styles",
+  "features": [
+   "33+ languages",
+   "15+ rap styles",
+   "No signup"
+  ],
+  "pricing": "free",
+  "freeTier": "Free, no account",
+  "featured": null,
+  "categoryName": "AI Rap Lyrics Generators",
+  "domain": "aifreebox.com"
+ },
+ {
+  "id": "typecast",
+  "name": "Typecast",
+  "url": "https://typecast.ai/voices/ai-rapper-voice-generator/",
+  "category": "ai-rapper-voice",
+  "tags": [],
+  "tagline": "Text-to-speech with expressive rapper voices from real voice actors",
+  "features": [
+   "700+ voices",
+   "Rap-style characters",
+   "Filter by style",
+   "Text-to-speech editor"
+  ],
+  "pricing": "freemium",
+  "freeTier": "3,000 credits (~5 min) lifetime; Basic $5/mo",
+  "featured": null,
+  "categoryName": "AI Rapper Voice Generators",
+  "domain": "typecast.ai"
+ },
+ {
+  "id": "vocs-ai",
+  "name": "Vocs AI",
+  "url": "https://vocs.ai",
+  "category": "ai-rapper-voice",
+  "tags": [
+   "voice-cloning"
+  ],
+  "tagline": "Convert your vocals into original AI singers and rappers",
+  "features": [
+   "Voice conversion",
+   "Original AI rappers",
+   "Pitch and tone control"
+  ],
+  "pricing": "freemium",
+  "freeTier": "3 AI artists, 15 downloads/mo; Pro $5.99/mo (reported)",
+  "featured": null,
+  "categoryName": "AI Rapper Voice Generators",
+  "domain": "vocs.ai"
+ },
+ {
+  "id": "basedlabs-rapper-voice",
+  "name": "BasedLabs Rapper Voice",
+  "url": "https://www.basedlabs.ai/tools/ai-rapper-voice-generator",
+  "category": "ai-rapper-voice",
+  "tags": [
+   "free"
+  ],
+  "tagline": "Paste lyrics, pick a voice and download AI-rapped audio",
+  "features": [
+   "Lyrics to rap audio",
+   "Voice picker",
+   "Audio download"
+  ],
+  "pricing": "free",
+  "freeTier": "Free tool",
+  "featured": null,
+  "categoryName": "AI Rapper Voice Generators",
+  "domain": "basedlabs.ai"
+ },
+ {
+  "id": "kits-ai",
+  "name": "Kits AI",
+  "url": "https://www.kits.ai",
+  "category": "ai-rapper-voice",
+  "tags": [
+   "voice-cloning"
+  ],
+  "tagline": "Voice cloning and conversion with rap voice models like UK and Chicago rap",
+  "features": [
+   "Rap voice library",
+   "Voice cloning",
+   "Voice-to-voice"
+  ],
+  "pricing": "freemium",
+  "freeTier": "15 conversion minutes free; Starter $10/mo",
+  "featured": null,
+  "categoryName": "AI Rapper Voice Generators",
+  "domain": "kits.ai"
+ },
+ {
+  "id": "musicfy",
+  "name": "Musicfy",
+  "url": "https://musicfy.lol",
+  "category": "ai-rapper-voice",
+  "tags": [
+   "voice-cloning"
+  ],
+  "tagline": "AI voice cloning and conversion for rap-style vocals",
+  "features": [
+   "Voice cloning",
+   "Voice conversion",
+   "Song generation"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free tier, no card; Starter $8/mo billed yearly",
+  "featured": null,
+  "categoryName": "AI Rapper Voice Generators",
+  "domain": "musicfy.lol"
+ },
+ {
+  "id": "mureka",
+  "name": "Mureka",
+  "url": "https://www.mureka.ai",
+  "category": "ai-music-generator",
+  "tags": [],
+  "tagline": "Song generator with a Suno-like workflow and no download cap",
+  "features": [
+   "Full songs with vocals",
+   "Custom lyrics",
+   "Downloads"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free basic generation with limits; Basic $8/mo yearly",
+  "featured": null,
+  "categoryName": "AI Music Generators",
+  "domain": "mureka.ai"
+ },
+ {
+  "id": "boomy",
+  "name": "Boomy",
+  "url": "https://boomy.com",
+  "category": "ai-music-generator",
+  "tags": [
+   "free"
+  ],
+  "tagline": "Beginner-friendly instant song maker with free unlimited generation",
+  "features": [
+   "Instant songs",
+   "Beginner friendly",
+   "Release to streaming"
+  ],
+  "pricing": "freemium",
+  "freeTier": "Free: save 25 songs, no downloads; Creator ~$9.99/mo",
+  "featured": null,
+  "categoryName": "AI Music Generators",
+  "domain": "boomy.com"
+ }
+];
+window.CATEGORIES = {
+ "ai-rap-video": "AI Rap Video Generators",
+ "ai-music-video": "AI Music Video Generators",
+ "lip-sync-avatar": "Lip-Sync & Avatar Tools",
+ "ai-video-models": "AI Video Models",
+ "ai-rap-song": "AI Rap Song Generators",
+ "ai-music-generator": "AI Music Generators",
+ "ai-rapper-voice": "AI Rapper Voice Generators",
+ "ai-rap-lyrics": "AI Rap Lyrics Generators"
+};

@@ -1,0 +1,30 @@
+{
+  "a": "viggle",
+  "b": "higgsfield-rap-god",
+  "mediaType": "video",
+  "date": "2026-10",
+  "intro": "One selfie, one rap verse, two 'make my photo rap' tools. Which one lip-syncs better?",
+  "roast": {
+    "a": [
+      "One photo, Rap tool, now your selfie spitting bars",
+      "Five free a day, I'm the people's pick, not just the stars",
+      "Eight thousand templates, motion on demand",
+      "You got one effect, I got the whole band"
+    ],
+    "b": [
+      "Rap God on the label, one tap and it's viral",
+      "Genjutsu face-swap, send your feed in a spiral",
+      "Rap Flex on the camera, that movement is mine",
+      "You bring the templates, I bring the cinema shine"
+    ]
+  },
+  "rounds": [
+    {
+      "title": "Make this selfie rap",
+      "prompt": "Photo-to-rap video, the person raps the verse to camera",
+      "inputs": "Same front-facing photo (photo.jpg) and the same 15s rap audio (verse.mp3) in both tools. First render kept.",
+      "a": { "media": "/battles/viggle-vs-higgsfield-rap-god/1-viggle.mp4" },
+      "b": { "media": "/battles/viggle-vs-higgsfield-rap-god/1-higgsfield-rap-god.mp4" }
+    }
+  ]
+}

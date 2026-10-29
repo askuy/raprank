@@ -7,6 +7,7 @@ import Faq from '../../components/Faq.astro';
 import { getEntry, getEntries } from 'astro:content';
 import { getAlternatives, getTools, hostname, outboundUrl, pricingLabel } from '../../lib/data';
 import { breadcrumbSchema, faqSchema, softwareSchema } from '../../lib/schema';
+import { battleTitle, getBattlesFor } from '../../lib/battles';
 
 export async function getStaticPaths() {
   return (await getTools()).map((tool) => ({ params: { slug: tool.id }, props: { tool } }));
@@ -16,6 +17,7 @@ const d = tool.data;
 const category = (await getEntry(d.category))!;
 const tags = await getEntries(d.tags);
 const alternatives = await getAlternatives(tool, 6);
+const battles = await getBattlesFor(tool.id);
 const crumbs = [
   { name: category.data.name, href: `/category/${category.id}` },
   { name: d.name, href: `/tool/${tool.id}` },
@@ -59,6 +61,7 @@ const faq = [
         {tags.length > 0 && <div class="flex flex-wrap gap-2">{tags.map((t) => <a href={`/tag/${t.id}`} class="chip">{t.data.name}</a>)}</div>}
         <p class="text-xs text-zinc-600">Pricing changes often. Check the official site before you buy.</p>
       </div>
+      {battles.map(({ battle, a, b }) => <a href={`/battle/${battle.id}`} class="card block text-sm text-zinc-300 hover:border-brand">🥊 Blind test: {battleTitle(a, b)} →</a>)}
       {d.alternativesPage && <a href={`/alternatives/${tool.id}`} class="card block text-sm text-zinc-300 hover:border-brand">See all {d.name} alternatives →</a>}
     </aside>
   </div>

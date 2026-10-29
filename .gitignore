@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# raw battle exports (compressed copies are committed)
+public/battles/**/*.orig.*

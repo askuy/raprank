@@ -1,0 +1,37 @@
+{
+  "a": "suno",
+  "b": "udio",
+  "mediaType": "audio",
+  "date": "2026-10",
+  "intro": "The two biggest AI song generators, same prompts, side by side. Listen blind, pick a winner, then see which tool made which track.",
+  "roast": {
+    "a": [
+      "Fifty credits a day, that's ten songs before lunch",
+      "Udio hands you ten, man, that ain't even a brunch",
+      "Custom lyrics, extend it, remix it, I'm the blueprint they chase",
+      "Every 'Suno alternative' list, I'm the reason it's a race"
+    ],
+    "b": [
+      "Polished mixes, that's the word on the street",
+      "You got the volume, I got the master, I'm the one with the heat",
+      "Inpainting on deck, I can fix a single line",
+      "Same ten bucks a month, but my vocals sit fine"
+    ]
+  },
+  "rounds": [
+    {
+      "title": "Trap verse",
+      "prompt": "Dark trap beat, 140 BPM, confident male rap vocal about staying up all night writing rhymes, heavy 808s, hi-hat rolls",
+      "inputs": "Default model, custom lyrics off, first generation kept (no cherry-picking). Trim to the first 30 seconds.",
+      "a": { "media": "/battles/suno-vs-udio/1-suno.mp3" },
+      "b": { "media": "/battles/suno-vs-udio/1-udio.mp3" }
+    },
+    {
+      "title": "Boom bap with your own lyrics",
+      "prompt": "90s boom bap, 90 BPM, dusty drums, jazzy piano sample, laid-back male rap vocal",
+      "inputs": "Custom lyrics mode with the same 8 bars pasted into both tools (the shared lyrics at /battles/suno-vs-udio/lyrics.txt). First generation kept.",
+      "a": { "media": "/battles/suno-vs-udio/2-suno.mp3" },
+      "b": { "media": "/battles/suno-vs-udio/2-udio.mp3" }
+    }
+  ]
+}

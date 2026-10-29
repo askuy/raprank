@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RapRank Hot 55: The AI Rap Tool Charts</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<script src="data.js"></script>
+<style>
+  :root { --brand: #f97316; }
+  body { font-family: Inter, system-ui, sans-serif; background: #0a0a0b; }
+  .display { font-family: Anton, Impact, sans-serif; letter-spacing: .01em; }
+  .mono { font-family: "Space Mono", ui-monospace, monospace; }
+  .grain { background-image: radial-gradient(rgba(255,255,255,.035) 1px, transparent 1px); background-size: 3px 3px; }
+
+  /* Vinyl */
+  .vinyl { position: relative; border-radius: 9999px; flex-shrink: 0;
+    background:
+      radial-gradient(circle at 50% 50%, transparent 0 31%, rgba(255,255,255,.0) 31%),
+      repeating-radial-gradient(circle at 50% 50%, #111 0 1.5px, #1c1c1f 1.5px 3px),
+      #111;
+    box-shadow: 0 0 0 1px #000, 0 6px 18px rgba(0,0,0,.6); }
+  .vinyl::after { content: ""; position: absolute; inset: 0; border-radius: 9999px;
+    background: conic-gradient(from 0deg, transparent 0 20%, rgba(255,255,255,.12) 25%, transparent 32% 70%, rgba(255,255,255,.08) 75%, transparent 82%); }
+  .vinyl .label { position: absolute; inset: 31%; border-radius: 9999px; display: grid; place-items: center; overflow: hidden; z-index: 1; }
+  .vinyl .label img { width: 58%; height: 58%; border-radius: 6px; }
+  .vinyl .label::after { content: ""; position: absolute; width: 9%; height: 9%; border-radius: 9999px; background: #0a0a0b; }
+  .spinning { animation: spin 1.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Turntable */
+  .platter { background: radial-gradient(circle, #2a2a2e 0 60%, #1a1a1d 61% 100%); }
+  .tonearm { position: absolute; top: 5%; right: 2%; width: 12%; height: 58%; transform-origin: 50% 8%; transform: rotate(-4deg); transition: transform .9s cubic-bezier(.5,1.6,.4,1); z-index: 5; }
+  .tonearm.on { transform: rotate(24deg); }
+  .tonearm .pivot { position: absolute; top: 0; left: 50%; width: 46px; height: 46px; margin-left: -23px; border-radius: 9999px; background: radial-gradient(circle, #d4d4d8 0 30%, #52525b 32% 100%); box-shadow: 0 4px 10px rgba(0,0,0,.6); }
+  .tonearm .arm { position: absolute; top: 20px; left: 50%; width: 6px; height: 88%; margin-left: -3px; border-radius: 3px; background: linear-gradient(90deg, #a1a1aa, #e4e4e7, #a1a1aa); }
+  .tonearm .head { position: absolute; bottom: -4px; left: 50%; width: 22px; height: 34px; margin-left: -14px; border-radius: 4px; background: var(--brand); transform: rotate(18deg); box-shadow: 0 4px 8px rgba(0,0,0,.5); }
+
+  .eq span { display: inline-block; width: 3px; margin-right: 2px; background: var(--brand); border-radius: 1px; height: 4px; }
+  .playing-eq span { animation: eq .5s ease-in-out infinite alternate; }
+  .playing-eq span:nth-child(2) { animation-delay: .15s; } .playing-eq span:nth-child(3) { animation-delay: .3s; } .playing-eq span:nth-child(4) { animation-delay: .1s; }
+  @keyframes eq { from { height: 3px; } to { height: 16px; } }
+
+  .liner { background: #f3ead7; color: #2a2118; background-image: repeating-linear-gradient(0deg, transparent 0 23px, rgba(0,0,0,.05) 23px 24px); transform: rotate(-1deg); }
+  .row { transition: background .15s, transform .15s; }
+  .row:hover, .row.active { background: rgba(249,115,22,.07); }
+  .row.active { box-shadow: inset 4px 0 0 var(--brand); }
+  .chip-on { background: var(--brand); color: #0a0a0b; border-color: var(--brand); }
+  .needle-drop { animation: drop .5s ease; }
+  @keyframes drop { 0% { transform: scale(.9); opacity: .4 } 100% { transform: scale(1); opacity: 1 } }
+  ::-webkit-scrollbar { height: 6px; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+</style>
+</head>
+<body class="min-h-screen text-zinc-200 grain">
+
+<header class="sticky top-0 z-30 border-b border-zinc-800 bg-[#0a0a0b]/90 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+    <a href="/" class="text-xl font-black tracking-tight text-white">Rap<span class="text-[var(--brand)]">Rank</span></a>
+    <div class="flex items-center gap-2">
+      <button id="needleBtn" class="rounded-full bg-[var(--brand)] px-4 py-2 text-sm font-extrabold text-zinc-950 hover:bg-orange-400">🎲 Drop the needle</button>
+      <button id="muteBtn" class="rounded-full border border-zinc-700 px-3 py-2 text-sm hover:border-[var(--brand)]" title="Toggle sound">🔊</button>
+    </div>
+  </div>
+</header>
+
+<main class="mx-auto max-w-6xl px-4 pb-20">
+  <!-- Masthead -->
+  <section class="flex flex-wrap items-end justify-between gap-4 pt-8">
+    <div>
+      <p class="mono text-xs uppercase tracking-[.3em] text-[var(--brand)]">Week of Oct 29, 2026</p>
+      <h1 class="display mt-1 text-6xl leading-none text-white sm:text-8xl">HOT <span class="text-[var(--brand)]" id="hotCount">55</span></h1>
+      <p class="mt-2 max-w-md text-zinc-400">The weekly chart of AI rap and music video tools. Hover over a record to hear it, and click one to put it on the deck.</p>
+    </div>
+    <p id="soundHint" class="mono rounded-lg border border-dashed border-zinc-700 px-3 py-2 text-xs text-zinc-400">🎧 Click anywhere to turn the sound on</p>
+  </section>
+
+  <!-- Now Playing deck -->
+  <section id="deck" class="mt-8 grid gap-6 rounded-3xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-950 p-5 md:grid-cols-[minmax(0,420px)_1fr] md:p-8">
+    <div class="relative mx-auto aspect-square w-full max-w-[420px] overflow-hidden rounded-2xl bg-gradient-to-br from-[#3a2a1e] to-[#1e1510] p-[7%] shadow-2xl shadow-black/60">
+      <div class="platter relative aspect-square w-full rounded-full p-[3%]">
+        <div id="deckVinyl" class="vinyl h-full w-full"><div class="label" id="deckLabel"></div></div>
+      </div>
+      <div id="tonearm" class="tonearm"><div class="pivot"></div><div class="arm"></div><div class="head"></div></div>
+      <div class="absolute bottom-[4%] left-[5%] flex items-center gap-2">
+        <span class="h-2.5 w-2.5 rounded-full bg-zinc-700" id="powerLed"></span>
+        <span class="mono text-[10px] uppercase tracking-widest text-zinc-500" id="bpmLabel">33⅓ RPM</span>
+      </div>
+    </div>
+
+    <div class="flex min-w-0 flex-col">
+      <div class="flex items-center gap-3">
+        <span class="mono text-xs uppercase tracking-[.3em] text-zinc-500">Now playing</span>
+        <span class="eq" id="deckEq"><span></span><span></span><span></span><span></span></span>
+      </div>
+      <div id="deckInfo" class="needle-drop"></div>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="mt-10">
+    <div class="flex items-center gap-2 overflow-x-auto pb-2" id="chips"></div>
+  </section>
+
+  <!-- Chart -->
+  <section class="mt-4 overflow-hidden rounded-2xl border border-zinc-800">
+    <div class="hidden grid-cols-[64px_72px_minmax(0,1fr)_120px_110px] items-center gap-4 border-b border-zinc-800 bg-zinc-900/80 px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-zinc-500 sm:grid">
+      <span>Rank</span><span></span><span>Title / Artist</span><span>Move</span><span class="text-right">Wks on chart</span>
+    </div>
+    <ol id="chart" class="divide-y divide-zinc-800/80"></ol>
+    <p id="empty" class="hidden p-10 text-center text-zinc-500">No records in this crate. Try another genre.</p>
+  </section>
+
+  <p class="mono mt-6 text-center text-xs text-zinc-600">Chart positions are a prototype. Each sound is synthesized live in your browser from that tool's name. No audio files are used.</p>
+</main>
+
+<script>
+(() => {
+  const TOOLS = window.TOOLS || [];
+  const SHORT = {
+    'ai-rap-video': 'Rap Video', 'ai-music-video': 'Music Video', 'lip-sync-avatar': 'Lip-Sync',
+    'ai-video-models': 'Video Models', 'ai-rap-song': 'Rap Song', 'ai-music-generator': 'Music Gen',
+    'ai-rapper-voice': 'Voice', 'ai-rap-lyrics': 'Lyrics',
+  };
+
+  // ---------- deterministic helpers ----------
+  function hash(str) { let h = 2166136261; for (const c of str) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function rng(seed) { return () => { seed |= 0; seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const isFree = (t) => t.pricing === 'free' || (t.pricing === 'freemium' && !!t.freeTier);
+
+  // ---------- chart data ----------
+  const chart = TOOLS.map((t) => {
+    const h = hash(t.id);
+    const k = h % 10;
+    let move;
+    if (k <= 1) move = { type: 'new' };
+    else if (k === 2) move = { type: 'hot' };
+    else if (k <= 6) move = { type: 'up', n: ((h >>> 4) % 9) + 1 };
+    else move = { type: 'down', n: ((h >>> 8) % 5) + 1 };
+    const weeks = move.type === 'new' ? 1 : ((h >>> 12) % 30) + 2;
+    const hue = h % 360;
+    return { ...t, h, move, weeks, hue, score: (t.featured ? 1000 : 0) + (h % 997) };
+  }).sort((a, b) => b.score - a.score).map((t, i) => ({ ...t, rank: i + 1 }));
+  document.getElementById('hotCount').textContent = chart.length;
+  const byId = new Map(chart.map((t) => [t.id, t]));
+
+  // ---------- audio engine ----------
+  let ctx = null, master = null, muted = false, noiseBuf = null;
+  let current = null, timer = null, step = 0, nextTime = 0;
+
+  function initAudio() {
+    if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    master = ctx.createGain(); master.gain.value = muted ? 0 : 0.55;
+    const comp = ctx.createDynamicsCompressor(); master.connect(comp); comp.connect(ctx.destination);
+    noiseBuf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+    const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    document.getElementById('soundHint').textContent = '🔊 Sound on. Hover over a record to preview it.';
+  }
+  const unlock = () => initAudio();
+  window.addEventListener('pointerdown', unlock, { passive: true });
+  window.addEventListener('keydown', unlock);
+
+  function patternFor(t) {
+    const r = rng(t.h);
+    const bpm = 78 + Math.floor(r() * 70);
+    const kick = Array.from({ length: 16 }, (_, i) => i === 0 || (i % 4 === 0 && r() < .5) || r() < .12);
+    const snare = Array.from({ length: 16 }, (_, i) => i === 4 || i === 12 || (r() < .06));
+    const hatDensity = r();
+    const hats = Array.from({ length: 16 }, (_, i) => hatDensity > .6 ? true : hatDensity > .3 ? i % 2 === 0 : i % 4 === 2 || r() < .2);
+    const roll = r() < .4 ? 14 : -1; // trap-style hat roll
+    const root = 36 + Math.floor(r() * 10); // MIDI
+    const scale = [0, 3, 5, 7, 10, 12];
+    const bass = Array.from({ length: 16 }, (_, i) => (i % 4 === 0 || r() < .18) ? root + scale[Math.floor(r() * 4)] : null);
+    const lead = Array.from({ length: 16 }, () => r() < .22 ? root + 24 + scale[Math.floor(r() * scale.length)] : null);
+    const wave = ['square', 'triangle', 'sawtooth'][Math.floor(r() * 3)];
+    return { bpm, kick, snare, hats, roll, bass, lead, wave };
+  }
+  const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
+
+  function kickAt(t) { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(42, t + .12); g.gain.setValueAtTime(1, t); g.gain.exponentialRampToValueAtTime(.001, t + .35); o.connect(g).connect(master); o.start(t); o.stop(t + .36); }
+  function noiseAt(t, dur, type, freq, vol) { const s = ctx.createBufferSource(); s.buffer = noiseBuf; const f = ctx.createBiquadFilter(); f.type = type; f.frequency.value = freq; const g = ctx.createGain(); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + dur); s.connect(f).connect(g).connect(master); s.start(t); s.stop(t + dur + .01); }
+  function snareAt(t) { noiseAt(t, .18, 'bandpass', 1800, .6); const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'triangle'; o.frequency.value = 190; g.gain.setValueAtTime(.35, t); g.gain.exponentialRampToValueAtTime(.001, t + .1); o.connect(g).connect(master); o.start(t); o.stop(t + .12); }
+  function hatAt(t, v = .18) { noiseAt(t, .04, 'highpass', 8000, v); }
+  function toneAt(t, midi, dur, type, vol, cutoff) { const o = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain(); o.type = type; o.frequency.value = mtof(midi); f.type = 'lowpass'; f.frequency.value = cutoff; g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + dur); o.connect(f).connect(g).connect(master); o.start(t); o.stop(t + dur + .02); }
+
+  function scheduler() {
+    if (!current) return;
+    const p = current.pattern, s16 = 60 / p.bpm / 4;
+    while (nextTime < ctx.currentTime + .12) {
+      const i = step % 16;
+      if (p.kick[i]) kickAt(nextTime);
+      if (p.snare[i]) snareAt(nextTime);
+      if (p.hats[i]) hatAt(nextTime);
+      if (i === p.roll || i === p.roll + 1) { hatAt(nextTime + s16 / 3, .12); hatAt(nextTime + 2 * s16 / 3, .12); }
+      if (p.bass[i] != null) toneAt(nextTime, p.bass[i], s16 * 1.8, 'sawtooth', .28, 420);
+      if (p.lead[i] != null) toneAt(nextTime, p.lead[i], s16 * 1.2, p.wave, .07, 2400);
+      nextTime += s16; step++;
+    }
+  }
+  function play(t) {
+    if (!ctx || ctx.state !== 'running') { initAudio(); if (!ctx) return; }
+    if (current && current.id === t.id) return;
+    current = { id: t.id, pattern: patternFor(t) };
+    step = 0; nextTime = ctx.currentTime + .05;
+    clearInterval(timer); timer = setInterval(scheduler, 25); scheduler();
+    document.getElementById('bpmLabel').textContent = `${current.pattern.bpm} BPM`;
+  }
+  function stop() { current = null; clearInterval(timer); timer = null; }
+
+  // ---------- rendering ----------
+  const favicon = (t, sz = 128) => `https://www.google.com/s2/favicons?domain=${encodeURIComponent(t.domain)}&sz=${sz}`;
+  const labelBg = (t) => `background: radial-gradient(circle, hsl(${t.hue} 85% 62%) 0 55%, hsl(${(t.hue + 30) % 360} 80% 45%) 56% 100%)`;
+  function moveBadge(m) {
+    if (m.type === 'new') return '<span class="rounded bg-sky-500/15 px-2 py-0.5 text-xs font-extrabold text-sky-300">NEW</span>';
+    if (m.type === 'hot') return '<span class="rounded bg-orange-500/15 px-2 py-0.5 text-xs font-extrabold text-orange-300">🔥 HOT STREAK</span>';
+    if (m.type === 'up') return `<span class="text-sm font-extrabold text-emerald-400">▲ ${m.n}</span>`;
+    return `<span class="text-sm font-extrabold text-rose-400">▼ ${m.n}</span>`;
+  }
+
+  let deckId = null;
+  let filter = 'all', freeOnly = false;
+
+  function renderDeck(t) {
+    deckId = t.id;
+    document.getElementById('deckLabel').setAttribute('style', labelBg(t));
+    document.getElementById('deckLabel').innerHTML = `<img src="${favicon(t)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'${esc(t.name).charAt(0)}',style:'font-size:2.5rem;color:#fff'}))">`;
+    const sides = ['A1', 'A2', 'A3', 'B1', 'B2', 'B3'];
+    const info = document.getElementById('deckInfo');
+    info.classList.remove('needle-drop'); void info.offsetWidth; info.classList.add('needle-drop');
+    info.innerHTML = `
+      <div class="mt-2 flex items-baseline gap-3">
+        <span class="display text-5xl text-zinc-700">#${t.rank}</span>
+        <h2 class="display min-w-0 truncate text-4xl text-white sm:text-5xl">${esc(t.name)}</h2>
+      </div>
+      <p class="mt-1 text-sm text-zinc-400">by <span class="font-semibold text-[var(--brand)]">${esc(t.categoryName)}</span> · ${esc(t.domain)} · ${t.weeks} wk${t.weeks > 1 ? 's' : ''} on chart</p>
+      <p class="mt-4 text-lg text-zinc-200">“${esc(t.tagline)}”</p>
+      <div class="mt-5 grid gap-5 lg:grid-cols-2">
+        <div>
+          <p class="mono mb-2 text-[11px] uppercase tracking-[.3em] text-zinc-500">Tracklist</p>
+          <ol class="space-y-1.5 text-sm">
+            ${(t.features || []).slice(0, 6).map((f, i) => `<li class="flex gap-3"><span class="mono w-6 shrink-0 text-zinc-600">${sides[i]}</span><span class="text-zinc-300">${esc(f)}</span></li>`).join('')}
+          </ol>
+        </div>
+        <div class="liner rounded-sm p-4 shadow-lg shadow-black/40">
+          <p class="mono text-[11px] font-bold uppercase tracking-[.25em]">Liner notes</p>
+          <p class="mono mt-2 text-xs leading-6"><b>Pricing:</b> ${esc(t.pricing ? t.pricing[0].toUpperCase() + t.pricing.slice(1) : 'Unknown')}</p>
+          <p class="mono text-xs leading-6"><b>Free side:</b> ${esc(t.freeTier || 'No free pressing. Paid only.')}</p>
+          ${isFree(t) ? '<p class="mono mt-1 inline-block rotate-[-4deg] rounded border-2 border-emerald-700 px-2 text-[11px] font-bold uppercase text-emerald-700">Free to spin</p>' : ''}
+        </div>
+      </div>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="${esc(t.url)}?ref=raprank.org" target="_blank" rel="nofollow noopener sponsored" class="rounded-full bg-[var(--brand)] px-5 py-2.5 font-extrabold text-zinc-950 hover:bg-orange-400">▶ Visit ${esc(t.name)} ↗</a>
+        <a href="/tool/${esc(t.id)}" class="rounded-full border border-zinc-600 px-5 py-2.5 font-semibold text-white hover:border-[var(--brand)]">Full review</a>
+      </div>`;
+    document.querySelectorAll('#chart .row').forEach((r) => r.classList.toggle('active', r.dataset.id === t.id));
+  }
+
+  function setDeckPlaying(on) {
+    document.getElementById('deckVinyl').classList.toggle('spinning', on);
+    document.getElementById('tonearm').classList.toggle('on', on);
+    document.getElementById('deckEq').classList.toggle('playing-eq', on);
+    document.getElementById('powerLed').className = `h-2.5 w-2.5 rounded-full ${on ? 'bg-[var(--brand)] shadow-[0_0_10px_#f97316]' : 'bg-zinc-700'}`;
+  }
+
+  function renderChips() {
+    const cats = [...new Set(chart.map((t) => t.category))];
+    const chips = [{ id: 'all', label: 'All genres' }, ...cats.map((c) => ({ id: c, label: SHORT[c] || c }))];
+    const el = document.getElementById('chips');
+    el.innerHTML = chips.map((c) => `<button data-cat="${c.id}" class="chip shrink-0 rounded-full border border-zinc-700 px-4 py-1.5 text-sm font-semibold hover:border-[var(--brand)] ${filter === c.id ? 'chip-on' : ''}">${esc(c.label)}</button>`).join('')
+      + `<span class="mx-1 h-6 w-px shrink-0 bg-zinc-800"></span><button id="freeChip" class="shrink-0 rounded-full border border-emerald-700 px-4 py-1.5 text-sm font-semibold text-emerald-300 ${freeOnly ? '!bg-emerald-500 !text-zinc-950' : ''}">✓ Free only</button>`;
+    el.querySelectorAll('[data-cat]').forEach((b) => b.addEventListener('click', () => { filter = b.dataset.cat; renderChips(); renderChart(); }));
+    document.getElementById('freeChip').addEventListener('click', () => { freeOnly = !freeOnly; renderChips(); renderChart(); });
+  }
+
+  const visible = () => chart.filter((t) => (filter === 'all' || t.category === filter) && (!freeOnly || isFree(t)));
+
+  function renderChart() {
+    const list = visible();
+    document.getElementById('empty').classList.toggle('hidden', list.length > 0);
+    document.getElementById('chart').innerHTML = list.map((t) => `
+      <li class="row grid cursor-pointer grid-cols-[44px_56px_minmax(0,1fr)] items-center gap-3 px-3 py-3 sm:grid-cols-[64px_72px_minmax(0,1fr)_120px_110px] sm:gap-4 sm:px-4 ${t.id === deckId ? 'active' : ''}" data-id="${t.id}">
+        <span class="display text-3xl ${t.rank <= 3 ? 'text-[var(--brand)]' : 'text-zinc-500'} sm:text-4xl">${t.rank}</span>
+        <div class="vinyl h-14 w-14 sm:h-16 sm:w-16"><div class="label" style="${labelBg(t)}"><img loading="lazy" src="${favicon(t, 64)}" alt=""></div></div>
+        <div class="min-w-0">
+          <p class="truncate text-base font-extrabold text-white sm:text-lg">${esc(t.name)}</p>
+          <p class="truncate text-sm text-zinc-400">${esc(t.categoryName)}${isFree(t) ? ' · <span class="text-emerald-400">free side</span>' : ''}</p>
+          <div class="mt-1 flex items-center gap-2 sm:hidden">${moveBadge(t.move)}<span class="text-xs text-zinc-500">${t.weeks} wks</span></div>
+        </div>
+        <div class="hidden sm:block">${moveBadge(t.move)}</div>
+        <div class="hidden text-right sm:block"><span class="display text-2xl text-zinc-300">${t.weeks}</span></div>
+      </li>`).join('');
+    wireRows();
+  }
+
+  const canHover = matchMedia('(hover: hover)').matches;
+  function wireRows() {
+    document.querySelectorAll('#chart .row').forEach((row) => {
+      const t = byId.get(row.dataset.id);
+      const vinyl = row.querySelector('.vinyl');
+      if (canHover) {
+        row.addEventListener('mouseenter', () => { vinyl.classList.add('spinning'); if (ctx && ctx.state === 'running') { play(t); setDeckPlaying(t.id === deckId); } });
+        row.addEventListener('mouseleave', () => {
+          vinyl.classList.remove('spinning');
+          if (!ctx) return;
+          // Return to whatever is on the deck.
+          const deckTool = byId.get(deckId);
+          if (deckTool && deckPlaying) { play(deckTool); setDeckPlaying(true); } else { stop(); setDeckPlaying(false); }
+        });
+      }
+      row.addEventListener('click', () => loadDeck(t, true));
+    });
+  }
+
+  let deckPlaying = false;
+  function loadDeck(t, autoplay) {
+    renderDeck(t);
+    if (autoplay) {
+      initAudio();
+      current = null; play(t);
+      deckPlaying = true; setDeckPlaying(true);
+      if (!canHover) document.querySelectorAll('#chart .vinyl').forEach((v) => v.classList.toggle('spinning', v.closest('.row').dataset.id === t.id));
+      if (innerWidth < 768) document.getElementById('deck').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // Clicking the deck record toggles play/pause.
+  document.getElementById('deckVinyl').addEventListener('click', () => {
+    const t = byId.get(deckId); if (!t) return;
+    if (deckPlaying) { stop(); deckPlaying = false; setDeckPlaying(false); }
+    else { initAudio(); current = null; play(t); deckPlaying = true; setDeckPlaying(true); }
+  });
+
+  document.getElementById('needleBtn').addEventListener('click', () => {
+    const list = visible().length ? visible() : chart;
+    let t; do { t = list[Math.floor(Math.random() * list.length)]; } while (list.length > 1 && t.id === deckId);
+    loadDeck(t, true);
+    document.getElementById('deck').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  document.getElementById('muteBtn').addEventListener('click', (e) => {
+    muted = !muted; e.currentTarget.textContent = muted ? '🔇' : '🔊';
+    if (master) master.gain.setTargetAtTime(muted ? 0 : .55, ctx.currentTime, .02);
+  });
+
+  renderChips();
+  renderChart();
+  if (chart.length) renderDeck(chart[0]);
+})();
+</script>
+</body>
+</html>

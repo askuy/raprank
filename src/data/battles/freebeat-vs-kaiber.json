@@ -1,0 +1,30 @@
+{
+  "a": "freebeat",
+  "b": "kaiber",
+  "mediaType": "video",
+  "date": "2026-10",
+  "intro": "Same 30-second rap track, two AI music video generators. Watch both blind and vote for the better video.",
+  "roast": {
+    "a": [
+      "Five hundred free credits, step in and press play",
+      "Beat-synced, lip-synced, lyric-synced, every single way",
+      "Drop a Suno or a Spotify link and I start the show",
+      "Kaiber still arranging the canvas, moving slow"
+    ],
+    "b": [
+      "Beat Sync on the stems, every frame pulsing loud",
+      "Kling, Luma, Veo, Runway, I roll with the crowd",
+      "Flipbook eight minutes, that's a full-length cut",
+      "You make a clip for the feed, I make a film, so what"
+    ]
+  },
+  "rounds": [
+    {
+      "title": "Rap music video from one track",
+      "prompt": "Gritty night-time city rap video, neon reflections, cuts on the beat",
+      "inputs": "Upload the shared track (track.mp3, 30s) to both tools. 16:9, default style closest to the prompt, first render kept.",
+      "a": { "media": "/battles/freebeat-vs-kaiber/1-freebeat.mp4" },
+      "b": { "media": "/battles/freebeat-vs-kaiber/1-kaiber.mp4" }
+    }
+  ]
+}

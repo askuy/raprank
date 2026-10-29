@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Tool Battle Arena | RapRank</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { brand: '#f97316' },
+    fontFamily: { display: ['Anton', 'Impact', 'sans-serif'], sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+  } } };
+</script>
+<style>
+  body { background: #07070a; }
+  .spot { position: absolute; top: -20%; width: 60%; height: 140%; pointer-events: none; filter: blur(30px); opacity: .55; mix-blend-mode: screen; }
+  .spot.l { left: -10%; background: conic-gradient(from 160deg at 50% 0%, transparent 0deg, rgba(249,115,22,.35) 12deg, transparent 26deg); animation: swayL 7s ease-in-out infinite; transform-origin: 50% 0; }
+  .spot.r { right: -10%; background: conic-gradient(from 175deg at 50% 0%, transparent 0deg, rgba(56,189,248,.28) 12deg, transparent 26deg); animation: swayR 8s ease-in-out infinite; transform-origin: 50% 0; }
+  @keyframes swayL { 0%,100% { transform: rotate(-8deg); } 50% { transform: rotate(10deg); } }
+  @keyframes swayR { 0%,100% { transform: rotate(8deg); } 50% { transform: rotate(-10deg); } }
+  .floor { background: radial-gradient(ellipse at 50% 0%, rgba(249,115,22,.18), transparent 60%), repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0 2px, transparent 2px 80px); }
+  .avatar { transition: box-shadow .3s, transform .3s, filter .3s; }
+  .avatar.idle { filter: grayscale(.6) brightness(.7); }
+  .avatar.live { box-shadow: 0 0 0 4px #f97316, 0 0 40px 8px rgba(249,115,22,.6); animation: bounce .6667s ease-in-out infinite; }
+  .avatar.live.right { box-shadow: 0 0 0 4px #38bdf8, 0 0 40px 8px rgba(56,189,248,.6); }
+  @keyframes bounce { 0%,100% { transform: translateY(0) scale(1); } 15% { transform: translateY(-14px) scale(1.04); } 40% { transform: translateY(0) scale(.98); } }
+  .vs { text-shadow: 0 0 30px rgba(249,115,22,.8), 4px 4px 0 #000; animation: pulse 1.3333s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1) rotate(-4deg); } 50% { transform: scale(1.12) rotate(3deg); } }
+  .caret::after { content: '▌'; color: #f97316; animation: blink .8s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .float { position: absolute; font-size: 28px; pointer-events: none; animation: rise 1.8s ease-out forwards; }
+  @keyframes rise { from { transform: translateY(0) scale(.6); opacity: 1; } to { transform: translateY(-160px) scale(1.4); opacity: 0; } }
+  .hype { background: linear-gradient(90deg, #22c55e, #eab308, #f97316, #ef4444); transition: width .5s cubic-bezier(.2,1.4,.4,1); }
+  .shake { animation: shake .4s; }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px) rotate(-1deg); } 75% { transform: translateX(6px) rotate(1deg); } }
+  select { background-image: none; }
+  .winner { animation: crown 1s ease-out; }
+  @keyframes crown { from { transform: scale(.3) rotate(-20deg); opacity: 0; } to { transform: scale(1) rotate(0); opacity: 1; } }
+</style>
+</head>
+<body class="min-h-screen font-sans text-zinc-200 antialiased">
+
+<header class="border-b border-zinc-800/80 bg-black/60 backdrop-blur sticky top-0 z-30">
+  <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
+    <a href="/" class="text-xl font-black tracking-tight text-white">Rap<span class="text-brand">Rank</span> <span class="ml-2 rounded bg-brand px-2 py-0.5 align-middle font-display text-sm tracking-wider text-black">BATTLE ARENA</span></a>
+    <div class="flex items-center gap-3 text-sm">
+      <span class="hidden text-zinc-500 sm:inline">AI tools. Real stats. Bars.</span>
+      <button id="mute" class="rounded-full border border-zinc-700 px-3 py-1 hover:border-brand" title="Toggle beat">🔊 Beat on</button>
+    </div>
+  </div>
+</header>
+
+<div class="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[1fr_300px]">
+  <main>
+    <!-- Matchup picker -->
+    <section class="mb-4 flex flex-wrap items-center gap-2 text-sm">
+      <select id="cat" class="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-white focus:border-brand focus:outline-none"></select>
+      <select id="pickA" class="max-w-[42vw] rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-white focus:border-brand focus:outline-none"></select>
+      <span class="font-display text-zinc-500">VS</span>
+      <select id="pickB" class="max-w-[42vw] rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-white focus:border-brand focus:outline-none"></select>
+      <button id="random" class="rounded-lg border border-zinc-700 px-3 py-2 hover:border-brand hover:text-white">🎲 Random</button>
+    </section>
+    <section class="mb-5 flex flex-wrap items-center gap-2 text-xs">
+      <span class="text-zinc-500">Hot matchups:</span>
+      <button class="hot rounded-full border border-zinc-700 px-3 py-1 hover:border-brand hover:text-white" data-a="suno" data-b="udio">Suno vs Udio</button>
+      <button class="hot rounded-full border border-zinc-700 px-3 py-1 hover:border-brand hover:text-white" data-a="freebeat" data-b="kaiber">Freebeat vs Kaiber</button>
+      <button class="hot rounded-full border border-zinc-700 px-3 py-1 hover:border-brand hover:text-white" data-a="viggle" data-b="higgsfield-rap-god">Viggle vs Higgsfield Rap God</button>
+    </section>
+
+    <!-- Stage -->
+    <section id="stage" class="floor relative overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-b from-zinc-950 to-black">
+      <div class="spot l"></div><div class="spot r"></div>
+      <div id="floats" class="pointer-events-none absolute inset-0 z-20"></div>
+
+      <div class="relative z-10 px-4 pt-6 text-center">
+        <p id="round" class="font-mono text-xs uppercase tracking-[.3em] text-zinc-500">Choose your fighters</p>
+      </div>
+
+      <div class="relative z-10 grid grid-cols-[1fr_auto_1fr] items-start gap-2 px-3 py-6 sm:gap-6 sm:px-8">
+        <div id="cardA"></div>
+        <div class="vs select-none pt-10 font-display text-5xl text-brand sm:text-7xl">VS</div>
+        <div id="cardB"></div>
+      </div>
+
+      <!-- Hype meter -->
+      <div class="relative z-10 mx-4 sm:mx-8">
+        <div class="mb-1 flex justify-between font-mono text-[11px] uppercase tracking-widest text-zinc-500"><span>Crowd hype</span><span id="hypeLabel">Quiet</span></div>
+        <div class="h-3 overflow-hidden rounded-full bg-zinc-900 ring-1 ring-zinc-800"><div id="hype" class="hype h-full w-[4%] rounded-full"></div></div>
+      </div>
+
+      <!-- Verse box -->
+      <div class="relative z-10 p-4 sm:p-8">
+        <div id="verse" class="min-h-[220px] rounded-xl border border-zinc-800 bg-black/70 p-5 font-mono text-[15px] leading-relaxed sm:text-lg">
+          <p class="text-zinc-500">Pick two tools, then hit <span class="text-brand">Start battle</span>. Every bar is built from real pricing, free tiers and features.</p>
+        </div>
+        <div id="controls" class="mt-5 flex flex-wrap items-center justify-center gap-3">
+          <button id="start" class="rounded-xl bg-brand px-8 py-3 font-display text-2xl tracking-wider text-black shadow-[0_0_30px_rgba(249,115,22,.5)] hover:bg-orange-400">🎤 START BATTLE</button>
+        </div>
+      </div>
+    </section>
+    <p class="mt-3 text-center text-xs text-zinc-600">Bars are auto-generated from RapRank's listing data for fun. Check each tool's site for current pricing.</p>
+  </main>
+
+  <!-- Leaderboard -->
+  <aside class="space-y-4">
+    <div class="rounded-2xl border border-zinc-800 bg-zinc-950 p-5">
+      <div class="mb-3 flex items-baseline justify-between">
+        <h2 class="font-display text-2xl tracking-wide text-white">ARENA RANKINGS</h2>
+        <span class="font-mono text-[10px] uppercase text-zinc-600">Elo</span>
+      </div>
+      <ol id="board" class="space-y-1.5 text-sm"></ol>
+      <button id="reset" class="mt-4 text-xs text-zinc-600 hover:text-zinc-400">Reset my votes</button>
+    </div>
+    <div class="rounded-2xl border border-zinc-800 bg-zinc-950 p-5 text-sm text-zinc-400">
+      <p class="font-semibold text-white">How it works</p>
+      <p class="mt-2">Two tools from the same category trade four bars each. The roasts use real prices, free plans and features. You judge, and every vote moves the Elo rankings.</p>
+    </div>
+  </aside>
+</div>
+
+<div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-full bg-brand px-5 py-2 font-semibold text-black opacity-0 transition-opacity">Copied!</div>
+
+<script src="data.js"></script>
+<script>
+(() => {
+  const TOOLS = window.TOOLS || [];
+  const byId = Object.fromEntries(TOOLS.map((t) => [t.id, t]));
+  const $ = (id) => document.getElementById(id);
+  const pick = (a) => a[Math.floor(Math.random() * a.length)];
+  const shuffle = (a) => [...a].sort(() => Math.random() - 0.5);
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+  // ---------- Facts ----------
+  function facts(t) {
+    const free = t.freeTier ? t.freeTier.split(';')[0].replace(/\(.*?\)/g, '').trim() : null;
+    const m = (t.freeTier || '').match(/\$([\d.,]+)\s*\/\s*(mo|wk|yr)/);
+    const unit = m && { mo: 'a month', wk: 'a week', yr: 'a year' }[m[2]];
+    // Price lines read badly as "features", so keep those to the price facts.
+    const feats = t.features.filter((x) => !/\$/.test(x));
+    return {
+      name: t.name.replace(/\s*\(.*?\)\s*/g, ' ').trim(),
+      short: t.name.split(/[\s(:]/)[0],
+      domain: t.domain,
+      free: free && free.length > 48 ? free.slice(0, 46).trim() + '…' : free,
+      price: m ? `$${m[1]} ${unit}` : null,
+      feature: feats.length ? pick(feats) : null,
+      feature2: feats.length > 1 ? feats[feats.length - 1] : null,
+      watermark: /watermark/i.test(t.freeTier || ''),
+      isFree: t.pricing === 'free',
+      paid: t.pricing === 'paid',
+      featured: !!t.featured,
+      cat: t.categoryName.replace(/^AI /, '').replace(/ Generators?| Tools| Models/, '').toLowerCase(),
+      pricing: { free: 'Free', freemium: 'Freemium', paid: 'Paid' }[t.pricing] || 'Mystery-priced',
+    };
+  }
+
+  // ---------- Bar templates: 2-line couplets, facts in the middle, fixed rhymes at the end ----------
+  // Each: [condition(me, opp), (me, opp) => [line1, line2]]  →  ~26 bars total
+  const COUPLETS = [
+    [(m, o) => o.free, (m, o) => [`${o.short}? "${o.free}" — that's a starving artist's plate`, `I came here to feast, homie, you just showed up late`]],
+    [(m, o) => o.price, (m, o) => [`${o.price} for ${o.short}? That's a tax on the fans`, `I deliver the heat while you're still drawing up plans`]],
+    [(m, o) => m.feature, (m, o) => [`I got ${m.feature.toLowerCase()} — go ahead, read it and weep`, `${o.short} promising the world, but the features run cheap`]],
+    [() => true, (m, o) => [`They call me ${m.short}, the king of ${m.cat}, wearing the crown`, `${o.short} in the building? Nah, they packing up, leaving town`]],
+    [(m, o) => m.free && !m.watermark, (m, o) => [`Free plan? "${m.free}" — that's generous, that's grace`, `${o.short} want your card number before you even see the place`]],
+    [(m, o) => o.watermark && !m.watermark, (m, o) => [`${o.short}'s free plan got a watermark slapped on the screen`, `Mine come out clean, mint, the freshest that you've seen`]],
+    [() => true, (m, o) => [`${o.short}, your servers start shaking every time I log on`, `By the time you finish rendering, the whole crowd is gone`]],
+    [() => true, (m, o) => [`I'm ${m.domain} — bookmark it, keep it close, keep it near`, `${o.domain}? Even Google asking "who's that over here?"`]],
+    [(m, o) => o.feature, (m, o) => [`You hyping "${o.feature.toLowerCase()}" like it's something brand new`, `I was doing that last season, now I'm three moves past you`]],
+    [() => true, (m, o) => [`${o.short}, you're a rough demo — I'm the final cut`, `Press play on my output, watch every jaw in here shut`]],
+    [(m, o) => m.featured && !o.featured, (m, o) => [`RapRank put me on the front page — featured, that's prestige`, `${o.short} in the back row, still begging for a feature, geez`]],
+    [() => true, (m, o) => [`I turn a prompt to a banger in a couple of clicks`, `${o.short} still buffering, still loading, still stuck in the mix`]],
+    [(m, o) => m.price && o.price, (m, o) => [`You charge ${o.price}, I charge ${m.price} — let's do the math`, `Every dollar spent on ${o.short} is a detour off the path`]],
+    [(m, o) => m.isFree, (m, o) => [`I'm free, no strings, no card, no sign-up, no catch`, `${o.short} out here running a paywall, that's no match`]],
+    [(m, o) => o.paid, (m, o) => [`${o.short} don't even got a free tier, that's cold`, `Making fans pay at the door just to watch you get old`]],
+    [(m, o) => m.feature2, (m, o) => [`${m.feature2} — yeah, I put that in the toolbox too`, `${o.short} reading my changelog, trying to copy the crew`]],
+    [() => true, (m, o) => [`${m.pricing} and I'm still the main course on the menu`, `${o.short} is the opener — nobody bought tickets to the venue`]],
+    [() => true, (m, o) => [`They asked for a ${m.cat} that delivers, they typed in my name`, `${o.short} on page two of Google — man, that's a shame`]],
+  ];
+
+  function verse(me, opp, usedIdx) {
+    const m = facts(me), o = facts(opp);
+    const ok = shuffle(COUPLETS.map((c, i) => i)).filter((i) => !usedIdx.has(i) && COUPLETS[i][0](m, o));
+    return ok.slice(0, 2).flatMap((i) => { usedIdx.add(i); return COUPLETS[i][1](m, o); });
+  }
+
+  // ---------- Beat (WebAudio boom bap, 90 BPM) ----------
+  let ctx = null, master = null, muted = false, beatTimer = null, nextTime = 0, step = 0;
+  const BPM = 90, STEP = 60 / BPM / 4;
+  let noiseBuf = null;
+  function initAudio() {
+    if (ctx) return;
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    master = ctx.createGain(); master.gain.value = muted ? 0 : 0.7; master.connect(ctx.destination);
+    noiseBuf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+    const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  }
+  function kick(t) {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.18);
+    g.gain.setValueAtTime(1, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+    o.connect(g).connect(master); o.start(t); o.stop(t + 0.5);
+  }
+  function noise(t, dur, freq, type, vol) {
+    const s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    s.buffer = noiseBuf; f.type = type; f.frequency.value = freq;
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    s.connect(f).connect(g).connect(master); s.start(t); s.stop(t + dur + 0.02);
+  }
+  function snare(t) {
+    noise(t, 0.22, 1500, 'highpass', 0.6);
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.frequency.setValueAtTime(190, t); g.gain.setValueAtTime(0.4, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+    o.connect(g).connect(master); o.start(t); o.stop(t + 0.15);
+  }
+  const hat = (t, open) => noise(t, open ? 0.18 : 0.05, 7500, 'highpass', open ? 0.18 : 0.12);
+  function bass(t, freq) {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'triangle'; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.35, t + 0.02); g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+    o.connect(g).connect(master); o.start(t); o.stop(t + 0.55);
+  }
+  const BASS = { 0: 55, 7: 55, 10: 65.4, 16: 49, 23: 49, 26: 58.3 };
+  function schedule() {
+    while (nextTime < ctx.currentTime + 0.12) {
+      const s = step % 32, s16 = s % 16;
+      const swing = s16 % 2 ? STEP * 0.18 : 0;
+      const t = nextTime + swing;
+      if (s16 === 0 || s16 === 7 || s16 === 10) kick(t);
+      if (s16 === 4 || s16 === 12) snare(t);
+      if (s16 % 2 === 0) hat(t, s16 === 14);
+      if (BASS[s]) bass(t, BASS[s]);
+      nextTime += STEP; step++;
+    }
+  }
+  function startBeat() {
+    initAudio(); ctx.resume();
+    if (beatTimer) return;
+    nextTime = ctx.currentTime + 0.05; step = 0;
+    beatTimer = setInterval(schedule, 25);
+  }
+  function stopBeat() { clearInterval(beatTimer); beatTimer = null; }
+  $('mute').onclick = () => {
+    muted = !muted;
+    if (master) master.gain.setTargetAtTime(muted ? 0 : 0.7, ctx.currentTime, 0.05);
+    $('mute').textContent = muted ? '🔇 Beat off' : '🔊 Beat on';
+  };
+
+  // ---------- Elo (localStorage) ----------
+  const KEY = 'raprank-arena-v1';
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
+  let ratings = load();
+  const rec = (id) => (ratings[id] ||= { elo: 1200, w: 0, l: 0 });
+  function vote(winner, loser) {
+    const a = rec(winner), b = rec(loser);
+    const ea = 1 / (1 + 10 ** ((b.elo - a.elo) / 400));
+    const delta = Math.round(32 * (1 - ea));
+    a.elo += delta; b.elo -= delta; a.w++; b.l++;
+    localStorage.setItem(KEY, JSON.stringify(ratings));
+    return delta;
+  }
+  function renderBoard(highlight = []) {
+    const rows = Object.entries(ratings).filter(([id]) => byId[id]).sort((x, y) => y[1].elo - x[1].elo).slice(0, 10);
+    $('board').innerHTML = rows.length ? rows.map(([id, r], i) => `
+      <li class="flex items-center gap-2 rounded-lg px-2 py-1.5 ${highlight.includes(id) ? 'bg-brand/15 ring-1 ring-brand/40' : ''}">
+        <span class="w-5 font-display text-lg ${i === 0 ? 'text-yellow-400' : i < 3 ? 'text-zinc-300' : 'text-zinc-600'}">${i + 1}</span>
+        <img src="https://www.google.com/s2/favicons?domain=${byId[id].domain}&sz=64" class="h-5 w-5 rounded" alt="">
+        <span class="flex-1 truncate text-zinc-200">${esc(byId[id].name)}</span>
+        <span class="font-mono text-xs text-zinc-500">${r.w}-${r.l}</span>
+        <span class="w-10 text-right font-mono font-bold text-white">${r.elo}</span>
+      </li>`).join('')
+      : '<li class="text-zinc-500">No battles judged yet. Your votes build the rankings.</li>';
+  }
+  $('reset').onclick = () => { ratings = {}; localStorage.removeItem(KEY); renderBoard(); };
+
+  // ---------- Picker ----------
+  const cats = Object.entries(window.CATEGORIES || {}).filter(([id]) => TOOLS.filter((t) => t.category === id).length >= 2);
+  let A = null, B = null, busy = false, lastWinner = null;
+
+  $('cat').innerHTML = cats.map(([id, name]) => `<option value="${id}">${esc(name)}</option>`).join('');
+  function fillPickers() {
+    const list = TOOLS.filter((t) => t.category === $('cat').value);
+    const opts = list.map((t) => `<option value="${t.id}">${esc(t.name)}</option>`).join('');
+    $('pickA').innerHTML = opts; $('pickB').innerHTML = opts;
+  }
+  function setPair(a, b) {
+    A = byId[a]; B = byId[b];
+    if ($('cat').value !== A.category) { $('cat').value = A.category; fillPickers(); }
+    $('pickA').value = A.id; $('pickB').value = B.id;
+    renderCards(); resetStage();
+  }
+  function randomPair(cat) {
+    const [cid] = cat ? [cat] : pick(cats);
+    const [a, b] = shuffle(TOOLS.filter((t) => t.category === cid));
+    setPair(a.id, b.id);
+  }
+  $('cat').onchange = () => { if (busy) return; randomPair($('cat').value); };
+  $('pickA').onchange = $('pickB').onchange = (e) => {
+    if (busy) return;
+    let a = $('pickA').value, b = $('pickB').value;
+    if (a === b) { const alt = TOOLS.find((t) => t.category === A.category && t.id !== a); e.target.id === 'pickA' ? (b = alt.id) : (a = alt.id); }
+    setPair(a, b);
+  };
+  $('random').onclick = () => { if (!busy) randomPair(); };
+  document.querySelectorAll('.hot').forEach((btn) => (btn.onclick = () => { if (!busy) setPair(btn.dataset.a, btn.dataset.b); }));
+
+  function card(t, side) {
+    const f = facts(t), r = ratings[t.id];
+    const ring = side === 'A' ? 'from-brand/30' : 'from-sky-400/30';
+    return `
+      <div class="flex flex-col items-center text-center">
+        <div class="relative">
+          <div id="av${side}" class="avatar idle ${side === 'B' ? 'right' : ''} grid h-24 w-24 place-items-center rounded-full bg-gradient-to-b ${ring} to-zinc-900 ring-2 ring-zinc-700 sm:h-32 sm:w-32">
+            <img src="https://www.google.com/s2/favicons?domain=${t.domain}&sz=128" alt="${esc(t.name)} logo" class="h-14 w-14 rounded-xl sm:h-20 sm:w-20">
+          </div>
+          <div id="crown${side}" class="absolute -top-7 left-1/2 hidden -translate-x-1/2 text-4xl">👑</div>
+        </div>
+        <h3 class="mt-4 font-display text-2xl leading-none tracking-wide text-white sm:text-4xl">${esc(f.name).toUpperCase()}</h3>
+        <p class="mt-1 font-mono text-[11px] uppercase tracking-widest ${side === 'A' ? 'text-brand' : 'text-sky-400'}">${esc(f.pricing)} · ${r ? r.elo + ' Elo' : 'Rookie'}</p>
+        <p class="mt-2 hidden max-w-xs text-xs text-zinc-400 sm:block">${esc(t.tagline)}</p>
+        <div class="mt-3 flex gap-2 text-xs">
+          <a href="${t.url}" target="_blank" rel="nofollow noopener" class="rounded-md bg-zinc-800 px-2.5 py-1 text-white hover:bg-zinc-700">Visit ↗</a>
+          <a href="/tool/${t.id}" class="rounded-md border border-zinc-700 px-2.5 py-1 hover:border-brand hover:text-white">Full review</a>
+        </div>
+      </div>`;
+  }
+  function renderCards() { $('cardA').innerHTML = card(A, 'A'); $('cardB').innerHTML = card(B, 'B'); }
+
+  // ---------- Hype ----------
+  let hype = 4;
+  const LABELS = [[0, 'Quiet'], [25, 'Murmuring'], [45, 'Heads nodding'], [65, 'Ooooh!'], [85, 'CROWD GOING CRAZY']];
+  function setHype(v) {
+    hype = Math.max(4, Math.min(100, v));
+    $('hype').style.width = hype + '%';
+    $('hypeLabel').textContent = LABELS.filter(([n]) => hype >= n).pop()[1];
+  }
+  function burst(emojis, side) {
+    const box = $('floats'), w = box.clientWidth;
+    for (let i = 0; i < 4; i++) {
+      const el = document.createElement('span');
+      el.className = 'float';
+      el.textContent = pick(emojis);
+      const base = side === 'A' ? 0.1 : side === 'B' ? 0.6 : 0.3;
+      el.style.left = (base + Math.random() * 0.3) * w + 'px';
+      el.style.top = 55 + Math.random() * 25 + '%';
+      el.style.animationDelay = i * 120 + 'ms';
+      box.append(el);
+      setTimeout(() => el.remove(), 2200);
+    }
+  }
+
+  // ---------- Battle flow ----------
+  function resetStage() {
+    lastWinner = null;
+    setHype(4);
+    $('round').textContent = `${A.categoryName} · Main event`;
+    $('verse').innerHTML = '<p class="text-zinc-500">Fighters ready. Hit <span class="text-brand">Start battle</span> to drop the beat.</p>';
+    $('controls').innerHTML = '<button id="start" class="rounded-xl bg-brand px-8 py-3 font-display text-2xl tracking-wider text-black shadow-[0_0_30px_rgba(249,115,22,.5)] hover:bg-orange-400">🎤 START BATTLE</button>';
+    $('start').onclick = battle;
+  }
+
+  async function typeLine(text, color) {
+    const p = document.createElement('p');
+    p.className = `caret ${color}`;
+    $('verse').append(p);
+    for (let i = 1; i <= text.length; i++) { p.textContent = text.slice(0, i); await sleep(22); }
+    p.classList.remove('caret');
+  }
+
+  async function spit(side, lines) {
+    const t = side === 'A' ? A : B, color = side === 'A' ? 'text-orange-200' : 'text-sky-200';
+    $('av' + side).classList.replace('idle', 'live');
+    $('round').textContent = side === 'A' ? `Round 1 · ${facts(t).name} on the mic` : `Round 2 · ${facts(t).name} fires back`;
+    const head = document.createElement('p');
+    head.className = `mb-1 mt-3 text-xs font-bold uppercase tracking-widest first:mt-0 ${side === 'A' ? 'text-brand' : 'text-sky-400'}`;
+    head.textContent = `🎤 ${facts(t).name}`;
+    $('verse').append(head);
+    for (let i = 0; i < lines.length; i++) {
+      await typeLine(lines[i], color);
+      // Punchline = 2nd line of each couplet.
+      if (i % 2 === 1) {
+        setHype(hype + 10 + Math.random() * 12);
+        burst(['🔥', '😱', '💀', '🎤', '👏', '🤯'], side);
+        $('stage').classList.add('shake'); setTimeout(() => $('stage').classList.remove('shake'), 400);
+      } else setHype(hype + 3);
+      await sleep(450);
+    }
+    $('av' + side).classList.replace('live', 'idle');
+  }
+
+  async function battle() {
+    if (busy) return;
+    busy = true;
+    startBeat();
+    setHype(10);
+    $('verse').innerHTML = '';
+    $('controls').innerHTML = '<p class="font-mono text-sm text-zinc-500">🎶 Battle in progress…</p>';
+    const used = new Set();
+    await sleep(900);
+    await spit('A', verse(A, B, used));
+    await sleep(700);
+    await spit('B', verse(B, A, used));
+    $('round').textContent = 'The judges are… you';
+    $('controls').innerHTML = `
+      <p class="w-full text-center font-display text-3xl tracking-wide text-white">WHO WON?</p>
+      <button data-w="A" class="vote rounded-xl bg-brand px-6 py-3 font-bold text-black hover:bg-orange-400">🔥 ${esc(facts(A).name)}</button>
+      <button data-w="B" class="vote rounded-xl bg-sky-400 px-6 py-3 font-bold text-black hover:bg-sky-300">🔥 ${esc(facts(B).name)}</button>`;
+    document.querySelectorAll('.vote').forEach((b) => (b.onclick = () => judge(b.dataset.w)));
+    busy = false;
+  }
+
+  function judge(side) {
+    const W = side === 'A' ? A : B, L = side === 'A' ? B : A;
+    const delta = vote(W.id, L.id);
+    lastWinner = W;
+    $('crown' + side).classList.remove('hidden'); $('crown' + side).classList.add('winner');
+    burst(['🏆', '👑', '🔥', '🎉'], side); burst(['🏆', '🎉'], side);
+    setHype(100);
+    $('round').textContent = `${facts(W).name} takes the belt`;
+    $('controls').innerHTML = `
+      <p class="winner w-full text-center text-lg text-white">🏆 <b>${esc(facts(W).name)}</b> wins! <span class="font-mono text-sm text-emerald-400">+${delta} Elo</span> · <span class="font-mono text-sm text-red-400">${esc(facts(L).short)} −${delta}</span></p>
+      <button id="rematch" class="rounded-xl border border-zinc-600 px-5 py-2.5 font-semibold hover:border-brand hover:text-white">🔁 Rematch (new bars)</button>
+      <button id="next" class="rounded-xl bg-brand px-5 py-2.5 font-bold text-black hover:bg-orange-400">⏭ Next battle</button>
+      <button id="share" class="rounded-xl border border-zinc-600 px-5 py-2.5 font-semibold hover:border-brand hover:text-white">📣 Share this battle</button>
+      <a href="/tool/${W.id}" class="w-full text-center text-sm text-brand hover:underline">Read the full ${esc(facts(W).name)} review →</a>`;
+    $('rematch').onclick = () => { renderCards(); resetStage(); battle(); };
+    $('next').onclick = () => { randomPair(); battle(); };
+    $('share').onclick = share;
+    renderBoard([W.id, L.id]);
+    // Refresh Elo badges, keep the crown.
+    const keep = side;
+    renderCards(); $('crown' + keep).classList.remove('hidden');
+  }
+
+  function share() {
+    const a = facts(A).name, b = facts(B).name;
+    const text = `🎤 ${a} vs ${b} — AI tool rap battle on RapRank.${lastWinner ? ` I gave it to ${facts(lastWinner).name}.` : ''} Who do you got? https://raprank.org/battle/${A.id}-vs-${B.id}`;
+    navigator.clipboard?.writeText(text).catch(() => {});
+    const t = $('toast'); t.style.opacity = 1; setTimeout(() => (t.style.opacity = 0), 1400);
+  }
+
+  // ---------- Init ----------
+  fillPickers();
+  setPair('suno', 'udio');
+  renderBoard();
+  // ?demo auto-runs a battle (for screenshots / previews).
+  if (new URLSearchParams(location.search).has('demo')) battle();
+})();
+</script>
+</body>
+</html>

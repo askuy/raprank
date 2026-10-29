@@ -5,11 +5,14 @@ import { SITE, FREE_TOOLS } from '../lib/site';
 import { getTree, getTools } from '../lib/data';
 import { getCollection } from 'astro:content';
 import { itemListSchema } from '../lib/schema';
+import { battleTitle, getBattles } from '../lib/battles';
+import ToolIcon from '../components/ToolIcon.astro';
 
 const tree = await getTree();
 const tools = await getTools();
 const rapVideo = tools.filter((t) => t.data.category.id === 'ai-rap-video');
 const lists = await getCollection('lists');
+const battles = await getBattles();
 ---
 <Base
   title="AI Rap Video Generator Directory: Best AI Rap & Music Video Tools | RapRank"
@@ -40,6 +43,21 @@ const lists = await getCollection('lists');
       <a href="/best/best-ai-rap-video-generator" class="text-sm text-brand hover:underline">See the ranked list →</a>
     </div>
     <ToolGrid tools={rapVideo.slice(0, 9)} />
+  </section>
+
+  <section class="mb-14">
+    <div class="mb-5 flex items-end justify-between">
+      <h2 class="text-2xl font-bold text-white">🥊 Battles: blind tests with real outputs</h2>
+      <a href="/battle" class="text-sm text-brand hover:underline">All battles →</a>
+    </div>
+    <div class="grid gap-4 md:grid-cols-3">
+      {battles.map(({ battle, a, b }) => (
+        <a href={`/battle/${battle.id}`} class="card flex items-center gap-3 hover:border-brand">
+          <ToolIcon tool={a} /><span class="font-black italic text-brand">VS</span><ToolIcon tool={b} />
+          <span class="font-semibold text-white">{battleTitle(a, b)}</span>
+        </a>
+      ))}
+    </div>
   </section>
 
   <section class="mb-14">

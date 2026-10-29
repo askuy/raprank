@@ -1,5 +1,5 @@
 import { defineCollection, reference } from 'astro:content';
-import { file } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 const groups = defineCollection({
@@ -68,4 +68,34 @@ const lists = defineCollection({
   }),
 });
 
-export const collections = { groups, categories, tags, tools, lists };
+// One JSON file per matchup in src/data/battles; media lives in public/battles/<id>/.
+const side = z.object({
+  // Path under public/, e.g. "/battles/suno-vs-udio/suno-1.mp3". Missing files show a placeholder.
+  media: z.string().optional(),
+  note: z.string().optional(),
+});
+
+const battles = defineCollection({
+  loader: glob({ pattern: '*.json', base: 'src/data/battles' }),
+  schema: z.object({
+    a: reference('tools'),
+    b: reference('tools'),
+    mediaType: z.enum(['audio', 'video']),
+    date: z.string(),
+    intro: z.string(),
+    roast: z.object({ a: z.array(z.string()).length(4), b: z.array(z.string()).length(4) }),
+    rounds: z.array(
+      z.object({
+        title: z.string(),
+        // The exact prompt/settings used in both tools, so the test is fair and repeatable.
+        prompt: z.string(),
+        inputs: z.string().optional(),
+        a: side,
+        b: side,
+      }),
+    ),
+    verdict: z.string().optional(),
+  }),
+});
+
+export const collections = { groups, categories, tags, tools, lists, battles };
