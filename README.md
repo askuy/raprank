@@ -34,3 +34,14 @@ Each battle is one file, `src/data/battles/<a>-vs-<b>.json`, holding the roast l
 4. `pnpm battle check` shows which files are still missing. A round with missing files shows "samples coming" on the site, and the build still passes.
 
 Suggested formats: audio as mp3 128–192 kbps, about 30s; video as mp4 H.264 720p, about 15–30s, kept under 5 MB each.
+
+## Deploy (Cloudflare Workers Static Assets)
+
+`wrangler.jsonc` serves `dist/` as static files only (no server code) and binds raprank.org and www.raprank.org. www is 301-redirected to the apex domain by a Cloudflare Redirect Rule.
+
+```sh
+export CLOUDFLARE_ACCOUNT_ID=... CLOUDFLARE_API_TOKEN=...   # never commit these
+pnpm deploy
+```
+
+Note: don't use `wrangler pages ...`. New versions of wrangler auto-install the SSR adapter and modify the astro config.

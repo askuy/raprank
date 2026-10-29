@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # raw battle exports (compressed copies are committed)
 public/battles/**/*.orig.*
+
+# wrangler
+.wrangler/

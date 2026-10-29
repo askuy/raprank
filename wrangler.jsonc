@@ -1,0 +1,15 @@
+// Static-only deploy: Cloudflare Workers Static Assets serves dist/ (no server code).
+{
+  "name": "raprank",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    // /tool/flyu → tool/flyu.html, matching build.format: 'file' and the canonical URLs.
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    { "pattern": "raprank.org", "custom_domain": true },
+    { "pattern": "www.raprank.org", "custom_domain": true }
+  ]
+}
