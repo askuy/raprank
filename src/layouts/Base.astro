@@ -59,6 +59,14 @@ const jsonLd = graph.length ? JSON.stringify({ '@context': 'https://schema.org',
     <meta property="og:image:alt" content={title} />
     <meta name="twitter:card" content="summary_large_image" />
     {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
+    <!-- Google tag (gtag.js); is:inline so Astro ships it as-is -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-YGXEE14YSK"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-YGXEE14YSK');
+    </script>
     <slot name="head" />
   </head>
   <body class="min-h-screen flex flex-col">
