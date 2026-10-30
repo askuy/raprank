@@ -7,11 +7,13 @@ import Footer from '../components/Footer.astro';
 interface Props {
   title: string;
   description: string;
+  /** Full-bleed pages (games) manage their own width. */
+  wide?: boolean;
   /** JSON-LD objects to embed. */
   schema?: object[];
   noindex?: boolean;
 }
-const { title, description, schema = [], noindex = false } = Astro.props;
+const { title, description, schema = [], noindex = false, wide = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '') || '/', SITE.url);
 const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
 ---
@@ -33,10 +35,11 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
     {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+    <slot name="head" />
   </head>
   <body class="min-h-screen flex flex-col">
     <Header />
-    <main class="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
+    <main class={wide ? 'w-full flex-1' : 'mx-auto w-full max-w-6xl flex-1 px-4 py-10'}>
       <slot />
     </main>
     <Footer />
