@@ -8,7 +8,7 @@ const categories = await getClientCategories();
 const byId = new Map(tools.map((t) => [t.id, t]));
 // Real blind tests, so the arena can link a matchup to its /battle page.
 const battles = (await getCollection('battles'))
-  .map((b) => ({ id: b.id, a: b.data.a.id, b: b.data.b.id }))
+  .map((b) => ({ id: b.id, a: b.data.a.id, b: b.data.b.id, roast: b.data.roast }))
   .filter((b) => byId.has(b.a) && byId.has(b.b));
 const hot = battles.map((b) => ({ ...b, label: `${byId.get(b.a)!.name} vs ${byId.get(b.b)!.name}` }));
 ---
@@ -146,6 +146,7 @@ const hot = battles.map((b) => ({ ...b, label: `${byId.get(b.a)!.name} vs ${byId
   const TOOLS = JSON.parse(document.getElementById('tools-data').textContent);
   const CATEGORIES = JSON.parse(document.getElementById('categories-data').textContent);
   const BATTLES = JSON.parse(document.getElementById('battles-data').textContent);
+  const SCRIPTED_DONE = new Set();
   const byId = Object.fromEntries(TOOLS.map((t) => [t.id, t]));
   const $ = (id) => document.getElementById(id);
   const pick = (a) => a[Math.floor(Math.random() * a.length)];
@@ -197,7 +198,7 @@ const hot = battles.map((b) => ({ ...b, label: `${byId.get(b.a)!.name} vs ${byId
     [(m, o) => o.paid, (m, o) => [`${o.short} don't even got a free tier, that's cold`, `Making fans pay at the door just to watch you get old`]],
     [(m, o) => m.feature2, (m, o) => [`${m.feature2} — yeah, I put that in the toolbox too`, `${o.short} reading my changelog, trying to copy the crew`]],
     [() => true, (m, o) => [`${m.pricing} and I'm still the main course on the menu`, `${o.short} is the opener — nobody bought tickets to the venue`]],
-    [() => true, (m, o) => [`They asked for a ${m.cat} that delivers, they typed in my name`, `${o.short}, you're good, but tonight you just ain't in the frame`]],
+    [() => true, (m, o) => [`They needed a ${m.cat} tool that delivers, so they typed in my name`, `${o.short}, you're good, but tonight you just ain't in the frame`]],
   ];
 
   function verse(me, opp, usedIdx) {
@@ -424,10 +425,16 @@ const hot = battles.map((b) => ({ ...b, label: `${byId.get(b.a)!.name} vs ${byId
     $('verse').innerHTML = '';
     $('controls').innerHTML = '<p class="font-mono text-sm text-zinc-500">🎶 Battle in progress…</p>';
     const used = new Set();
+    // Hand-written roasts for featured matchups on the first run; rematches use the templates.
+    const pair = BATTLES.find((x) => (x.a === A.id && x.b === B.id) || (x.a === B.id && x.b === A.id));
+    const key = [A.id, B.id].sort().join('|');
+    const scripted = pair && !SCRIPTED_DONE.has(key);
+    if (scripted) SCRIPTED_DONE.add(key);
+    const linesFor = (me, opp) => (scripted ? (pair.a === me.id ? pair.roast.a : pair.roast.b) : verse(me, opp, used));
     await sleep(900);
-    await spit('A', verse(A, B, used));
+    await spit('A', linesFor(A, B));
     await sleep(700);
-    await spit('B', verse(B, A, used));
+    await spit('B', linesFor(B, A));
     $('round').textContent = 'The judges are… you';
     $('controls').innerHTML = `
       <p class="w-full text-center font-display text-3xl tracking-wide text-white">WHO WON?</p>
