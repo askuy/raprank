@@ -11,8 +11,8 @@ const tiers = [
     name: 'Free listing',
     price: 'Free',
     points: ['Your own tool page plus a spot in your category', 'Can be picked for battles and best-of lists', 'Standard link (nofollow)', 'Reviewed in the order we receive submissions'],
-    cta: 'Submit for free',
-    plan: 'Free',
+    cta: 'Submit on GitHub',
+    href: LISTING.submitUrl,
   },
   {
     name: 'Verified (badge)',
@@ -26,8 +26,8 @@ const tiers = [
     name: 'Sponsored',
     price: LISTING.sponsorPrice,
     points: ['Pinned at the top of your category and on the home page', 'Featured in the Arena hot matchups', 'A blind-test battle against a competitor (first-generation outputs, clearly labeled)', 'Link marked rel="sponsored", as Google requires'],
-    cta: 'Contact us',
-    plan: 'Sponsored',
+    cta: 'Apply on GitHub',
+    href: LISTING.submitUrl,
   },
 ];
 ---
@@ -41,11 +41,14 @@ const tiers = [
           <p class="text-lg font-bold text-white">{t.name}</p>
           <p class="mt-1 text-2xl font-black text-brand">{t.price}</p>
           <ul class="mt-4 flex-1 space-y-2 text-sm text-zinc-300">{t.points.map((p) => <li>• {p}</li>)}</ul>
-          <a href={t.href ?? mail(t.plan!)} class={`mt-6 justify-center ${t.highlight ? 'btn' : 'inline-flex rounded-lg border border-zinc-600 px-4 py-2 font-semibold text-white hover:border-brand'}`}>{t.cta}</a>
+          <a href={t.href} class={`mt-6 justify-center ${t.highlight ? 'btn' : 'inline-flex rounded-lg border border-zinc-600 px-4 py-2 font-semibold text-white hover:border-brand'}`}>{t.cta}</a>
         </div>
       ))}
     </div>
+    <p class="mt-6 text-center text-sm text-zinc-500">Submissions go through a short GitHub form, and you'll get updates on your issue. No GitHub account? Email <a href={mail('Submission')} class="text-brand hover:underline">{LISTING.contact}</a>.</p>
     <section class="prose-rr mx-auto mt-12 max-w-3xl space-y-3">
+      <h2 class="text-2xl font-bold text-white">How it works</h2>
+      <p>1. Fill in the GitHub form. 2. We review it, usually within a few days. 3. Once approved, your tool page goes live automatically and we comment on your issue with the link.</p>
       <h2 class="text-2xl font-bold text-white">What we don't list</h2>
       <p>Sites that don't load, aren't related to AI music or rap, are thin wrappers with no product of their own, or host adult or pirated content. Paid plans never change a battle result or a ranking in a blind test.</p>
     </section>

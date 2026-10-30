@@ -1,0 +1,103 @@
+name: Submit an AI tool
+description: Get your AI rap / music video tool listed on raprank.org
+title: "[Submit] "
+labels: ["submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for submitting! Every tool is reviewed by a person. Approved tools go live on [raprank.org](https://raprank.org) automatically.
+  - type: input
+    id: name
+    attributes:
+      label: Tool name
+      placeholder: e.g. FlyU
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Website URL
+      placeholder: https://
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - AI Rap Video Generator
+        - AI Music Video Generator
+        - Lip-Sync & Avatar
+        - AI Video Model
+        - AI Rap Song Generator
+        - AI Music Generator
+        - AI Rapper Voice
+        - AI Rap Lyrics
+    validations:
+      required: true
+  - type: input
+    id: tagline
+    attributes:
+      label: One-line description
+      description: What it does, in under 90 characters. No hype words, please.
+    validations:
+      required: true
+  - type: dropdown
+    id: pricing
+    attributes:
+      label: Pricing
+      options:
+        - Free
+        - Freemium (free plan or free credits)
+        - Paid only
+    validations:
+      required: true
+  - type: input
+    id: free_tier
+    attributes:
+      label: Free plan and cheapest paid price
+      placeholder: e.g. 3 free videos/day with watermark; Pro $9.99/mo
+  - type: textarea
+    id: features
+    attributes:
+      label: Key features (one per line, 3–5)
+    validations:
+      required: true
+  - type: checkboxes
+    id: tags
+    attributes:
+      label: Tags
+      options:
+        - label: Lip-Sync
+        - label: Lyric Video
+        - label: Beat-Synced
+        - label: Photo to Video
+        - label: No Sign-up
+        - label: Commercial License
+        - label: Voice Cloning
+        - label: Mobile App
+        - label: API
+  - type: dropdown
+    id: plan
+    attributes:
+      label: Listing plan
+      description: See https://raprank.org/submit
+      options:
+        - Free listing (nofollow)
+        - Verified (I added the RapRank badge to my site)
+        - Sponsored (contact me about pricing)
+    validations:
+      required: true
+  - type: input
+    id: badge_url
+    attributes:
+      label: Page with the RapRank badge (Verified only)
+      description: Get the code at https://raprank.org/badge
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirm
+      options:
+        - label: The tool is live, related to AI music / rap, and has no adult or pirated content.
+          required: true

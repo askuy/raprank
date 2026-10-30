@@ -1,0 +1,63 @@
+# Label a submission issue "approved" → this adds the tool to tools.json and opens a PR.
+# Merging the PR deploys the site (deploy.yml) and closes the issue.
+name: Approve submission
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  add-tool:
+    if: github.event.label.name == 'approved' && contains(github.event.issue.labels.*.name, 'submission')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - id: add
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: node scripts/submission.mjs 2>&1 | tee /tmp/out.txt; exit ${PIPESTATUS[0]}
+
+      - if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment ${{ github.event.issue.number }} --repo ${{ github.repository }} \
+            --body "❌ Couldn't add this tool automatically:
+          \`\`\`
+          $(tail -5 /tmp/out.txt)
+          \`\`\`
+          Edit the issue to fix it, then remove and re-add the \`approved\` label."
+
+      - id: pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: submission/${{ github.event.issue.number }}
+          commit-message: "Add ${{ steps.add.outputs.name }} (#${{ github.event.issue.number }})"
+          title: "Add ${{ steps.add.outputs.name }}"
+          body: |
+            Closes #${{ github.event.issue.number }}
+
+            ${{ steps.add.outputs.note }}
+
+            Review the entry in `src/data/tools.json`, then merge to publish.
+          labels: submission
+
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          # Passed via env (not inlined) so issue-derived text can't inject shell.
+          TOOL_ID: ${{ steps.add.outputs.id }}
+          PR_URL: ${{ steps.pr.outputs.pull-request-url }}
+          NOTE: ${{ steps.add.outputs.note }}
+        run: |
+          gh issue comment ${{ github.event.issue.number }} --repo ${{ github.repository }} \
+            --body "✅ Approved! It goes live at https://raprank.org/tool/$TOOL_ID once $PR_URL is merged. $NOTE"

@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { getTools } from '../lib/data';
-import { SITE } from '../lib/site';
+import { SITE, LISTING } from '../lib/site';
 const tools = (await getTools()).map((t) => ({ id: t.id, name: t.data.name })).sort((a, b) => a.name.localeCompare(b.name));
 ---
 <Base title="RapRank Badge: Show You're Featured" description="Add a 'Featured on RapRank' badge to your site. Tools that link back get a followed link and a Verified mark on RapRank.">
@@ -36,7 +36,7 @@ const tools = (await getTools()).map((t) => ({ id: t.id, name: t.data.name })).s
 
     <section class="prose-rr mt-12 space-y-3">
       <h2 class="text-2xl font-bold text-white">How verification works</h2>
-      <p>1. Paste the code on a public page of your site (the homepage or footer is best). 2. Email us the page URL at <a class="text-brand" href={`mailto:submit@raprank.org?subject=Badge%20added`}>submit@raprank.org</a>. 3. We check that the badge links to RapRank, then switch your listing to Verified.</p>
+      <p>1. Paste the code on a public page of your site (the homepage or footer is best). 2. <a class="text-brand hover:underline" href={LISTING.submitUrl}>Submit (or re-submit) on GitHub</a>, choose the "Verified" plan and add that page's URL. 3. We check automatically that the badge links to RapRank, then switch your listing to Verified.</p>
       <p>We re-check badges regularly. If the badge is removed, the listing goes back to a standard (nofollow) link.</p>
       <p>Not listed yet? <a href="/submit" class="text-brand hover:underline">Submit your tool</a> first.</p>
     </section>

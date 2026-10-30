@@ -19,5 +19,6 @@
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.4.4",
     "tailwindcss": "^4.3.3"
-  }
+  },
+  "packageManager": "pnpm@10.34.9"
 }

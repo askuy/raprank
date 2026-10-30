@@ -25,4 +25,7 @@ export const FREE_TOOLS = [
 export const LISTING = {
   sponsorPrice: '$49/month',
   contact: 'submit@raprank.org',
+  repo: 'https://github.com/askuy/raprank',
+  // GitHub issue form (.github/ISSUE_TEMPLATE/submit-tool.yml); approved issues become listings automatically.
+  submitUrl: 'https://github.com/askuy/raprank/issues/new?template=submit-tool.yml',
 };

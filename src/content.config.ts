@@ -47,6 +47,8 @@ const tools = defineCollection({
     listing: z.enum(['free', 'badge', 'sponsor']).default('free'),
     // Page on the tool's site that carries our badge; checked by `pnpm backlinks check`.
     backlink: z.object({ url: z.url(), checkedAt: z.string() }).optional(),
+    // GitHub issue number the tool was submitted in.
+    submittedIn: z.number().optional(),
     alternativesPage: z.boolean().default(false),
     // Hand-picked, ordered alternatives; unverified ids are skipped.
     alternatives: z.array(z.string()).optional(),
