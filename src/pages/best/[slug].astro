@@ -5,9 +5,8 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CompareTable from '../../components/CompareTable.astro';
 import ToolIcon from '../../components/ToolIcon.astro';
 import Faq from '../../components/Faq.astro';
-import { getListTools, outboundRel, outboundUrl, pricingLabel } from '../../lib/data';
+import { formatDate, getListTools, outboundRel, outboundUrl, pricingLabel } from '../../lib/data';
 import { breadcrumbSchema, collectionPageSchema, faqSchema } from '../../lib/schema';
-import { SITE } from '../../lib/site';
 
 export async function getStaticPaths() {
   return (await getCollection('lists')).map((list) => ({ params: { slug: list.id }, props: { list } }));
@@ -15,13 +14,14 @@ export async function getStaticPaths() {
 const { list } = Astro.props;
 const d = list.data;
 const tools = await getListTools(list);
+const checked = tools.map((t) => t.data.pricingCheckedAt).filter(Boolean).sort().at(-1);
 const crumbs = [{ name: 'Best Lists', href: '/best' }, { name: d.title, href: `/best/${list.id}` }];
 const schema = [breadcrumbSchema(crumbs), collectionPageSchema(d.title, `/best/${list.id}`, d.description, tools), ...(d.faq.length ? [faqSchema(d.faq)] : [])];
 ---
 <Base title={d.title} description={d.description} schema={schema}>
   <Breadcrumbs items={crumbs} />
   <h1 class="text-4xl font-black text-white">{d.title}</h1>
-  <p class="mt-2 text-sm text-zinc-500">{tools.length} tools · last updated {SITE.updated}</p>
+  <p class="mt-2 text-sm text-zinc-500">{tools.length} tools{checked && ` · pricing checked by hand ${formatDate(checked)}`} · <a href="/about" class="underline-offset-2 hover:text-brand hover:underline">How we test</a></p>
   <p class="mt-5 max-w-3xl text-lg text-zinc-400">{d.intro}</p>
 
   <h2 class="mb-4 mt-10 text-2xl font-bold text-white">Quick comparison</h2>
@@ -38,7 +38,7 @@ const schema = [breadcrumbSchema(crumbs), collectionPageSchema(d.title, `/best/$
         </div>
         <p class="mt-4 text-zinc-300">{t.data.tagline}.</p>
         <ul class="mt-3 list-inside list-disc text-sm text-zinc-400">{t.data.features.map((f) => <li>{f}</li>)}</ul>
-        <p class="mt-3 text-sm"><span class="text-zinc-500">Pricing:</span> {pricingLabel(t.data.pricing)}{t.data.freeTier && ` · ${t.data.freeTier}`}</p>
+        <p class="mt-3 text-sm"><span class="text-zinc-500">Pricing:</span> {pricingLabel(t.data.pricing)}{t.data.freeTier && ` · ${t.data.freeTier}`}{t.data.pricingCheckedAt && <span class="text-zinc-600"> · checked {formatDate(t.data.pricingCheckedAt)}</span>}</p>
       </section>
     ))}
   </div>

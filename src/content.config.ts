@@ -37,6 +37,8 @@ const tools = defineCollection({
     features: z.array(z.string()).default([]),
     pricing: z.enum(['free', 'freemium', 'paid']).nullable(),
     freeTier: z.string().nullable(),
+    // Date pricing/free tier were last checked by hand (YYYY-MM-DD).
+    pricingCheckedAt: z.string().optional(),
     brandKeyword: z.string(),
     // Editor's pick (free, editorial). Not paid.
     featured: z.boolean().default(false),
@@ -52,6 +54,8 @@ const tools = defineCollection({
     alternativesPage: z.boolean().default(false),
     // Hand-picked, ordered alternatives; unverified ids are skipped.
     alternatives: z.array(z.string()).optional(),
+    // Opt this tool page into search indexing (see src/lib/indexing.mjs).
+    index: z.boolean().default(false),
     // Unverified tools are kept in data but not published.
     verified: z.boolean().default(false),
   }),

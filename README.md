@@ -74,3 +74,11 @@ Implemented following the "SEO 落地" checklist:
 ```sh
 pnpm build && pnpm seo:check   # checks all pages: head tags, one H1, JSON-LD, broken internal links, sitemap, robots, llms.txt
 ```
+
+### Indexing scope (indexability)
+
+A new site should only expose substantial pages first. **Every** page's robots meta and the sitemap are decided by `src/lib/indexing.mjs`:
+- Indexable: home, `/best/*`, free tools, arena, `/about`, `/alternatives/suno`
+- Battle pages: become indexable **automatically** once at least one round has both samples
+- Tool pages: add `"index": true` in `tools.json` once the review content is thorough
+- Everything else (tags, categories, other tool pages, …) is `noindex, follow`: users can still reach them, links still pass on, they just aren't indexed yet

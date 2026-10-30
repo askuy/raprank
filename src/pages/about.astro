@@ -1,12 +1,56 @@
 ---
 import { webPageSchema } from '../lib/schema';
 import Base from '../layouts/Base.astro';
+import { formatDate, getTools } from '../lib/data';
+import { getBattles } from '../lib/battles';
+import { LISTING } from '../lib/site';
+
+const tools = await getTools();
+const checkedDates = tools.map((t) => t.data.pricingCheckedAt).filter(Boolean).sort() as string[];
+const lastChecked = formatDate(checkedDates.at(-1));
+const checkedCount = checkedDates.length;
+const reported = tools.filter((t) => /reported/i.test(t.data.freeTier ?? '')).length;
+const battles = await getBattles();
+const rounds = battles.flatMap((b) => b.rounds);
+const readyRounds = rounds.filter((r) => r.ready).length;
+const description = 'How RapRank lists, checks and ranks AI rap and music video tools: hand-checked, dated pricing, blind tests with first-generation outputs, and labeled sponsors.';
 ---
-<Base title="About RapRank: How We Test AI Rap Tools" description="How RapRank finds, checks and ranks AI rap and music video tools: hand-checked pricing, blind tests with first-generation outputs, and clearly labeled sponsors." schema={[webPageSchema('AboutPage', 'About RapRank', '/about', 'How RapRank finds, checks and ranks AI rap and music video tools.')]}>
-  <div class="prose-rr mx-auto max-w-2xl space-y-4">
-    <h1 class="text-4xl font-black text-white">About RapRank</h1>
-    <p>RapRank is an independent directory of AI tools for making rap and music videos: video generators, rap song and beat generators, rapper voices and lyric writers.</p>
-    <p>We check each tool's site, pricing page and free tier before listing it. Our rankings favor rap-specific features like fast lyric sync, lip-sync from a photo and rap styles, plus free plans that are actually usable.</p>
-    <p>Some outbound links may be affiliate links. They never affect where a tool ranks.</p>
-  </div>
+<Base title="About RapRank: How We Test AI Rap Tools" description={description} schema={[webPageSchema('AboutPage', 'About RapRank', '/about', description)]}>
+  <article class="prose-rr mx-auto max-w-3xl space-y-5">
+    <h1 class="text-4xl font-black text-white">How RapRank tests and ranks AI rap tools</h1>
+    <p class="text-lg">RapRank is an independent directory of AI tools for making rap: rap song generators, lyric writers, rapper voices, and rap and music video generators. We aren't affiliated with any tool we list. This page explains exactly what we check, what we don't, and how money is kept away from the rankings.</p>
+
+    <div class="grid gap-3 sm:grid-cols-3">
+      <div class="card"><p class="text-3xl font-black text-white">{tools.length}</p><p class="text-sm">tools listed after manual review</p></div>
+      <div class="card"><p class="text-3xl font-black text-white">{checkedCount}</p><p class="text-sm">pricing pages checked by hand{lastChecked && `, last on ${lastChecked}`}</p></div>
+      <div class="card"><p class="text-3xl font-black text-white">{readyRounds}/{rounds.length}</p><p class="text-sm">blind-test rounds published</p></div>
+    </div>
+
+    <h2 class="pt-4 text-2xl font-bold text-white">1. How a tool gets listed</h2>
+    <p>Every tool is opened and checked by a person before it goes live. It has to load, be its own product (not a thin wrapper around someone else's), and be about making rap or music. We reject adult and pirated content. Submissions come in through a <a href={LISTING.submitUrl} class="text-brand hover:underline">public GitHub form</a>, so the review trail is visible.</p>
+
+    <h2 class="pt-4 text-2xl font-bold text-white">2. How we check pricing and free plans</h2>
+    <p>We read each tool's official pricing page and write the free plan out in full: credits, watermarks, download limits and personal-use-only terms. "Free" alone doesn't tell you much. Every tool page shows the date we last checked it.</p>
+    <p>When a company doesn't publish prices, we use recent third-party reports and mark the plan <em>(reported)</em>. That applies to {reported} of {tools.length} tools right now. Prices change often, so always confirm on the official site before you pay.</p>
+
+    <h2 class="pt-4 text-2xl font-bold text-white">3. How the rankings are decided</h2>
+    <p>Rankings are editorial. We don't use a fake numeric score. For rap tools we weigh, in this order:</p>
+    <ol class="list-inside list-decimal space-y-1 text-zinc-400">
+      <li><strong class="text-zinc-200">Rap-specific ability</strong>: rap styles (trap, drill, boom bap), lyric sync that keeps up with fast flows, lip-sync from a photo.</li>
+      <li><strong class="text-zinc-200">A free plan you can actually test with</strong>: enough to judge the output before paying.</li>
+      <li><strong class="text-zinc-200">Clear commercial rights</strong>: whether you can release or monetize what you make.</li>
+      <li><strong class="text-zinc-200">Control</strong>: using your own lyrics, editing before rendering, output length.</li>
+    </ol>
+    <p>Tools marked <em>Editor's pick</em> are our call. <em>Sponsored</em> listings are labeled as such and never change a list's order beyond the pinned slot.</p>
+
+    <h2 class="pt-4 text-2xl font-bold text-white">4. How the blind tests work</h2>
+    <p>On every <a href="/battle" class="text-brand hover:underline">battle page</a>, both tools get the <strong class="text-zinc-200">same prompt and settings</strong>, printed above each round so you can repeat the test. We keep the <strong class="text-zinc-200">first generation</strong> from each tool (no rerolling until one sounds better) and trim both to the same length. The two outputs are shown in random order as Track 1 and Track 2. Names are revealed only after you vote.</p>
+    <p>Status: {readyRounds} of {rounds.length} rounds across {battles.length} matchups have published samples. Rounds still being generated are marked on their pages. We don't publish a verdict until there are real outputs to compare.</p>
+
+    <h2 class="pt-4 text-2xl font-bold text-white">5. How we make money</h2>
+    <p>Some outbound links are affiliate links, and tools can buy a <a href="/submit" class="text-brand hover:underline">sponsored placement</a>. Both are marked <code>rel="sponsored"</code>. Sponsors can't buy a battle result: their blind-test samples follow the same first-generation rule and are labeled. Free listings link with <code>nofollow</code>. Tools that link back with our <a href="/badge" class="text-brand hover:underline">badge</a> get a followed link.</p>
+
+    <h2 class="pt-4 text-2xl font-bold text-white">6. Corrections</h2>
+    <p>Spotted a wrong price, a dead tool or a missing feature? <a href={`${LISTING.repo}/issues/new`} class="text-brand hover:underline">Open an issue on GitHub</a> and we'll fix it and update the check date.</p>
+  </article>
 </Base>

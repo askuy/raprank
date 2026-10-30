@@ -5,7 +5,7 @@ import ToolIcon from '../../components/ToolIcon.astro';
 import ToolGrid from '../../components/ToolGrid.astro';
 import Faq from '../../components/Faq.astro';
 import { getEntry, getEntries } from 'astro:content';
-import { getAlternatives, getTools, hostname, outboundRel, outboundUrl, pricingLabel } from '../../lib/data';
+import { formatDate, getAlternatives, getTools, hostname, outboundRel, outboundUrl, pricingLabel } from '../../lib/data';
 import { breadcrumbSchema, faqSchema, softwareSchema } from '../../lib/schema';
 import { battleTitle, getBattlesFor } from '../../lib/battles';
 import { fitDescription, fitTitle } from '../../lib/seo';
@@ -64,7 +64,7 @@ const faq = [
           <div><dt class="text-zinc-500">Category</dt><dd><a href={`/category/${category.id}`} class="text-brand hover:underline">{category.data.name}</a></dd></div>
         </dl>
         {tags.length > 0 && <div class="flex flex-wrap gap-2">{tags.map((t) => <a href={`/tag/${t.id}`} class="chip">{t.data.name}</a>)}</div>}
-        <p class="text-xs text-zinc-600">Pricing changes often. Check the official site before you buy.</p>
+        <p class="text-xs text-zinc-600">{d.pricingCheckedAt ? `Pricing checked by hand on ${formatDate(d.pricingCheckedAt)}. ` : ''}Pricing changes often. Check the official site before you buy.</p>
         {d.listing === 'free' && <p class="text-xs text-zinc-600">Is this your tool? <a href="/badge" class="text-brand hover:underline">Get verified</a></p>}
       </div>
       {battles.map(({ battle, a, b }) => <a href={`/battle/${battle.id}`} class="card block text-sm text-zinc-300 hover:border-brand">🥊 Blind test: {battleTitle(a, b)} →</a>)}

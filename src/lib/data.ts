@@ -111,3 +111,8 @@ export function hostname(t: Tool) {
 export function pricingLabel(p: Tool['data']['pricing']) {
   return p ? { free: 'Free', freemium: 'Freemium', paid: 'Paid' }[p] : 'Pricing N/A';
 }
+
+/** "Oct 29, 2026" */
+export function formatDate(iso?: string) {
+  return iso ? new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : null;
+}

@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { SITE } from '../lib/site';
 import { ogImageFor } from '../lib/og-pages';
 import { ORG_ID, WEBSITE_ID } from '../lib/schema';
+import { isIndexable } from '../lib/indexing.mjs';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
@@ -21,7 +22,7 @@ const canonical = new URL(path, SITE.url).toString();
 // Content first, brand last ("Suno vs Udio: Blind Test — RapRank").
 const fullTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}`;
 const ogImage = new URL(await ogImageFor(path), SITE.url).toString();
-const robots = noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+const robots = noindex || !isIndexable(path) ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
 
 // Inner pages point at the site entities by @id instead of repeating them.
 const graph = schema.map((node) => {
