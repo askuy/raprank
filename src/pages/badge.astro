@@ -1,11 +1,12 @@
 ---
+import { webPageSchema } from '../lib/schema';
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { getTools } from '../lib/data';
 import { SITE, LISTING } from '../lib/site';
 const tools = (await getTools()).map((t) => ({ id: t.id, name: t.data.name })).sort((a, b) => a.name.localeCompare(b.name));
 ---
-<Base title="RapRank Badge: Show You're Featured" description="Add a 'Featured on RapRank' badge to your site. Tools that link back get a followed link and a Verified mark on RapRank.">
+<Base title="Featured on RapRank Badge for Your Site" description="Add a 'Featured on RapRank' badge to your site. Listed tools that link back get a followed link, a Verified mark and a higher spot in their category." schema={[webPageSchema('WebPage', 'RapRank badge', '/badge', 'Featured on RapRank badge and embed code.')]}>
   <Breadcrumbs items={[{ name: 'Badge', href: '/badge' }]} />
   <div class="mx-auto max-w-3xl">
     <h1 class="text-4xl font-black text-white">Featured on RapRank badge</h1>

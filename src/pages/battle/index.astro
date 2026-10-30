@@ -1,11 +1,12 @@
 ---
+import { webPageSchema } from '../../lib/schema';
 import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import ToolIcon from '../../components/ToolIcon.astro';
 import { battleTitle, getBattles } from '../../lib/battles';
 const battles = await getBattles();
 ---
-<Base title="AI Rap Tool Battles: Blind Tests, Side by Side" description="Head-to-head blind tests of AI music and rap video tools. Same prompt in both tools, real outputs, you pick the winner.">
+<Base title="AI Rap Tool Battles: Blind Tests, Side by Side" description="Head-to-head blind tests of AI music and rap video tools. Same prompt in both tools, first-generation outputs only, and you pick the winner." schema={[webPageSchema('CollectionPage', 'Battles', '/battle', 'Blind tests of AI music and rap video tools.')]}>
   <Breadcrumbs items={[{ name: 'Battles', href: '/battle' }]} />
   <h1 class="text-4xl font-black text-white">Battles</h1>
   <p class="mt-3 max-w-2xl text-lg text-zinc-400">Two tools, the same prompt, and real outputs played blind. Pick the better track and we'll reveal which tool made it.</p>

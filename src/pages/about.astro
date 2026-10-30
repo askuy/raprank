@@ -1,7 +1,8 @@
 ---
+import { webPageSchema } from '../lib/schema';
 import Base from '../layouts/Base.astro';
 ---
-<Base title="About RapRank" description="How RapRank finds, tests and ranks AI rap and music video tools.">
+<Base title="About RapRank: How We Test AI Rap Tools" description="How RapRank finds, checks and ranks AI rap and music video tools: hand-checked pricing, blind tests with first-generation outputs, and clearly labeled sponsors." schema={[webPageSchema('AboutPage', 'About RapRank', '/about', 'How RapRank finds, checks and ranks AI rap and music video tools.')]}>
   <div class="prose-rr mx-auto max-w-2xl space-y-4">
     <h1 class="text-4xl font-black text-white">About RapRank</h1>
     <p>RapRank is an independent directory of AI tools for making rap and music videos: video generators, rap song and beat generators, rapper voices and lyric writers.</p>

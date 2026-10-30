@@ -4,7 +4,7 @@ import ToolGrid from '../components/ToolGrid.astro';
 import { SITE, FREE_TOOLS } from '../lib/site';
 import { getTree, getTools } from '../lib/data';
 import { getCollection } from 'astro:content';
-import { itemListSchema } from '../lib/schema';
+import { collectionPageSchema, siteNodes } from '../lib/schema';
 import { battleTitle, getBattles } from '../lib/battles';
 import ToolIcon from '../components/ToolIcon.astro';
 
@@ -16,13 +16,9 @@ const battles = await getBattles();
 const main = battles.find((x) => x.battle.id === 'suno-vs-udio') ?? battles[0];
 ---
 <Base
-  title="RapRank: AI Rap Battles & the AI Rap Video Generator Directory"
+  title="AI Rap Battles & AI Rap Video Generators — RapRank"
   description={SITE.description}
-  schema={[
-    { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url,
-      potentialAction: { '@type': 'SearchAction', target: `${SITE.url}/search?q={q}`, 'query-input': 'required name=q' } },
-    itemListSchema('AI Rap Video Generators', rapVideo),
-  ]}
+  schema={[...siteNodes(), collectionPageSchema('AI Rap Video Generators', '/', SITE.description, rapVideo)]}
 >
   <!-- Hero: the main event is a battle -->
   <section class="relative mb-10 overflow-hidden rounded-3xl border border-zinc-800 bg-[radial-gradient(ellipse_at_15%_0%,rgba(249,115,22,.25),transparent_55%),radial-gradient(ellipse_at_85%_0%,rgba(56,189,248,.2),transparent_55%)] px-6 py-10 text-center sm:px-10 sm:py-14">

@@ -5,7 +5,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import ToolGrid from '../../components/ToolGrid.astro';
 import CompareTable from '../../components/CompareTable.astro';
 import { getCategoryTools } from '../../lib/data';
-import { breadcrumbSchema, itemListSchema } from '../../lib/schema';
+import { breadcrumbSchema, collectionPageSchema } from '../../lib/schema';
 
 export async function getStaticPaths() {
   const categories = await getCollection('categories');
@@ -16,7 +16,7 @@ const tools = await getCategoryTools(category.id);
 const siblings = (await getCollection('categories')).filter((c) => c.data.group.id === category.data.group.id && c.id !== category.id);
 const crumbs = [{ name: 'Categories', href: '/category' }, { name: category.data.name, href: `/category/${category.id}` }];
 ---
-<Base title={`${category.data.title} (${tools.length} Tools)`} description={category.data.description} schema={[breadcrumbSchema(crumbs), itemListSchema(category.data.title, tools)]}>
+<Base title={`${category.data.title} (${tools.length} Tools)`} description={category.data.description} schema={[breadcrumbSchema(crumbs), collectionPageSchema(category.data.title, `/category/${category.id}`, category.data.description, tools)]}>
   <Breadcrumbs items={crumbs} />
   <h1 class="text-4xl font-black text-white">{category.data.title}</h1>
   <p class="mt-4 max-w-3xl text-lg text-zinc-400">{category.data.intro}</p>

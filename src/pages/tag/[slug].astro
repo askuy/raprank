@@ -4,7 +4,8 @@ import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import ToolGrid from '../../components/ToolGrid.astro';
 import { getTools } from '../../lib/data';
-import { breadcrumbSchema } from '../../lib/schema';
+import { breadcrumbSchema, collectionPageSchema } from '../../lib/schema';
+import { fitDescription } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const tools = await getTools();
@@ -17,7 +18,12 @@ const { tag, tools } = Astro.props;
 const crumbs = [{ name: tag.data.name, href: `/tag/${tag.id}` }];
 // Thin tag pages (<3 tools) stay for navigation but are not indexed.
 ---
-<Base title={`${tag.data.name} AI Rap & Music Tools`} description={`${tools.length} AI rap and music video tools tagged ${tag.data.name}.`} noindex={tools.length < 3} schema={[breadcrumbSchema(crumbs)]}>
+<Base
+  title={`${tag.data.name} AI Rap & Music Video Tools`}
+  description={fitDescription([`${tools.length} AI rap and music video tools with ${tag.data.name.toLowerCase()}, including ${tools.slice(0, 3).map((t) => t.data.name).join(', ')}.`, 'Compare pricing, free plans and features side by side.', 'Compare pricing and free plans.'])}
+  noindex={tools.length < 3}
+  schema={[breadcrumbSchema(crumbs), collectionPageSchema(`${tag.data.name} AI rap & music video tools`, `/tag/${tag.id}`, `AI tools tagged ${tag.data.name}`, tools)]}
+>
   <Breadcrumbs items={crumbs} />
   <h1 class="mb-8 text-4xl font-black text-white">{tag.data.name} tools <span class="text-zinc-600">({tools.length})</span></h1>
   <ToolGrid tools={tools} />

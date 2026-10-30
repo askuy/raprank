@@ -62,3 +62,15 @@ Tools with `affiliateUrl` always get `sponsored`.
 pnpm backlinks scan    # scan every tool's homepage; any that link to raprank.org are auto-upgraded to badge
 pnpm backlinks check   # re-check badge tools; auto-downgrade to free if the badge is gone (run about weekly)
 ```
+
+## SEO
+
+Implemented following the "SEO 落地" checklist:
+- **head**: every page has its own title (content first, brand last, ≤60 chars), description, robots meta, self-referencing canonical, full OG/Twitter tags, and a 1200×630 OG image (generated at build time by `src/lib/og.ts`; edit card copy in `src/lib/og-pages.ts`)
+- **JSON-LD**: one `@graph` per page; the home page declares Organization/WebSite and other pages reference them by `@id`. Lists use CollectionPage + ItemList, tools use SoftwareApplication, generators/arena use WebApplication
+- **Root files**: `robots.txt`, `sitemap-index.xml` (noindex pages excluded), `llms.txt` (generated from data)
+- **Icons**: `public/favicon.svg` is the source; after changing it, run `node scripts/make-icons.mjs` to regenerate apple-touch-icon / logo / ico
+
+```sh
+pnpm build && pnpm seo:check   # checks all pages: head tags, one H1, JSON-LD, broken internal links, sitemap, robots, llms.txt
+```

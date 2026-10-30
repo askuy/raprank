@@ -1,10 +1,11 @@
 ---
+import { webPageSchema } from '../../lib/schema';
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 const lists = await getCollection('lists');
 ---
-<Base title="Best AI Rap & Music Video Tools: Ranked Lists" description="Ranked lists of the best AI rap video generators, music video makers, rap generators, rapper voices and lyric tools.">
+<Base title="Best AI Rap & Music Video Tools: Ranked Lists" description="Ranked lists of the best AI rap video generators, music video makers, rap song generators, rapper voices and lyric tools, with free plans compared." schema={[webPageSchema('CollectionPage', 'Best-of lists', '/best', 'Ranked lists of AI rap and music video tools.')]}>
   <Breadcrumbs items={[{ name: 'Best Lists', href: '/best' }]} />
   <h1 class="mb-8 text-4xl font-black text-white">Best-of lists</h1>
   <div class="grid gap-4 md:grid-cols-2">

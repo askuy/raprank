@@ -1,4 +1,5 @@
 ---
+import { webPageSchema } from '../lib/schema';
 import Base from '../layouts/Base.astro';
 import { LISTING } from '../lib/site';
 
@@ -31,7 +32,7 @@ const tiers = [
   },
 ];
 ---
-<Base title="Submit Your AI Tool to RapRank" description="List your AI rap, music video, voice or lyrics tool on RapRank. Free listing, Verified badge listing, or Sponsored placement.">
+<Base title="Submit Your AI Tool to RapRank" description="List your AI rap, music video, voice or lyrics tool on RapRank. Choose a free listing, a Verified badge listing with a followed link, or Sponsored placement." schema={[webPageSchema('WebPage', 'Submit your AI tool', '/submit', 'List your AI rap or music tool on RapRank.')]}>
   <div class="mx-auto max-w-5xl">
     <h1 class="text-center text-4xl font-black text-white">Get your AI tool on RapRank</h1>
     <p class="mx-auto mt-4 max-w-2xl text-center text-lg text-zinc-400">We list AI tools for rap videos, music videos, rap songs, rapper voices and lyrics. Every submission is checked by a person before it goes live.</p>

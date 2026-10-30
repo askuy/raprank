@@ -1,9 +1,10 @@
 ---
+import { webPageSchema } from '../lib/schema';
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { FREE_TOOLS } from '../lib/site';
 ---
-<Base title="Free Rap Tools: Lyrics & Rap Name Generators" description="Free browser-based rap tools from RapRank: rap lyrics generator and rap name generator. No sign-up.">
+<Base title="Free Rap Tools: Lyrics & Rap Name Generators" description="Free browser-based rap tools from RapRank: a rap lyrics generator for rhyming verses and a rap name generator for stage names. No sign-up, no limits." schema={[webPageSchema('CollectionPage', 'Free rap tools', '/free-tools', 'Free rap lyrics and rap name generators.')]}>
   <Breadcrumbs items={[{ name: 'Free Tools', href: '/free-tools' }]} />
   <h1 class="mb-8 text-4xl font-black text-white">Free rap tools</h1>
   <div class="grid gap-4 md:grid-cols-2">

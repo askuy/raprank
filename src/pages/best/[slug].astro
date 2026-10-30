@@ -6,7 +6,7 @@ import CompareTable from '../../components/CompareTable.astro';
 import ToolIcon from '../../components/ToolIcon.astro';
 import Faq from '../../components/Faq.astro';
 import { getListTools, outboundRel, outboundUrl, pricingLabel } from '../../lib/data';
-import { breadcrumbSchema, faqSchema, itemListSchema } from '../../lib/schema';
+import { breadcrumbSchema, collectionPageSchema, faqSchema } from '../../lib/schema';
 import { SITE } from '../../lib/site';
 
 export async function getStaticPaths() {
@@ -16,7 +16,7 @@ const { list } = Astro.props;
 const d = list.data;
 const tools = await getListTools(list);
 const crumbs = [{ name: 'Best Lists', href: '/best' }, { name: d.title, href: `/best/${list.id}` }];
-const schema = [breadcrumbSchema(crumbs), itemListSchema(d.title, tools), ...(d.faq.length ? [faqSchema(d.faq)] : [])];
+const schema = [breadcrumbSchema(crumbs), collectionPageSchema(d.title, `/best/${list.id}`, d.description, tools), ...(d.faq.length ? [faqSchema(d.faq)] : [])];
 ---
 <Base title={d.title} description={d.description} schema={schema}>
   <Breadcrumbs items={crumbs} />

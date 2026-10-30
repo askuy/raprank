@@ -5,7 +5,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CompareTable from '../../components/CompareTable.astro';
 import ToolGrid from '../../components/ToolGrid.astro';
 import { getAlternatives, getTools, pricingLabel } from '../../lib/data';
-import { breadcrumbSchema, itemListSchema } from '../../lib/schema';
+import { breadcrumbSchema, collectionPageSchema } from '../../lib/schema';
 import { SITE } from '../../lib/site';
 
 export async function getStaticPaths() {
@@ -23,7 +23,7 @@ const crumbs = [{ name: 'Alternatives', href: '/alternatives' }, { name: `${d.na
 <Base
   title={title}
   description={`Looking for a ${d.name} alternative? Compare ${alternatives.length} ${category.data.name.toLowerCase()} and similar tools by pricing, free tier and features.`}
-  schema={[breadcrumbSchema(crumbs), itemListSchema(title, alternatives)]}
+  schema={[breadcrumbSchema(crumbs), collectionPageSchema(title, `/alternatives/${tool.id}`, `Alternatives to ${d.name}`, alternatives)]}
 >
   <Breadcrumbs items={crumbs} />
   <h1 class="text-4xl font-black text-white">{title}</h1>

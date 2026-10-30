@@ -15,6 +15,8 @@ export default defineConfig({
   site: 'https://raprank.org',
   trailingSlash: 'never',
   build: { format: 'file' },
+  // Prefetch on hover makes full-page navigation feel instant.
+  prefetch: { prefetchAll: true },
   integrations: [
     sitemap({ filter: (page) => !excluded.some((p) => new URL(page).pathname.replace(/\/$/, '') === p) }),
   ],

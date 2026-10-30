@@ -8,6 +8,7 @@ import { getEntry, getEntries } from 'astro:content';
 import { getAlternatives, getTools, hostname, outboundRel, outboundUrl, pricingLabel } from '../../lib/data';
 import { breadcrumbSchema, faqSchema, softwareSchema } from '../../lib/schema';
 import { battleTitle, getBattlesFor } from '../../lib/battles';
+import { fitDescription, fitTitle } from '../../lib/seo';
 
 export async function getStaticPaths() {
   return (await getTools()).map((tool) => ({ params: { slug: tool.id }, props: { tool } }));
@@ -29,8 +30,8 @@ const faq = [
 ];
 ---
 <Base
-  title={`${d.name}: Features, Pricing & Alternatives`}
-  description={`${d.name} review: ${d.tagline}. Pricing, free tier, key features and the best ${d.name} alternatives.`}
+  title={fitTitle([`${d.name}: Features, Pricing & Alternatives`, `${d.name}: Pricing & Alternatives`, `${d.name} Review & Pricing`, d.name])}
+  description={fitDescription([`${d.name}: ${d.tagline}.`, `Pricing, free plan, key features and ${d.name} alternatives compared.`, 'Pricing and the best alternatives.'])}
   schema={[breadcrumbSchema(crumbs), softwareSchema(tool), faqSchema(faq)]}
 >
   <Breadcrumbs items={crumbs} />

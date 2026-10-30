@@ -23,6 +23,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+      - run: pnpm seo:check
       # wrangler-action pins an old wrangler that can't deploy assets-only Workers.
       - run: npx -y wrangler@4 deploy
         env:
