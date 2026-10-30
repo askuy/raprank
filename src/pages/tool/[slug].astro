@@ -5,7 +5,7 @@ import ToolIcon from '../../components/ToolIcon.astro';
 import ToolGrid from '../../components/ToolGrid.astro';
 import Faq from '../../components/Faq.astro';
 import { getEntry, getEntries } from 'astro:content';
-import { getAlternatives, getTools, hostname, outboundUrl, pricingLabel } from '../../lib/data';
+import { getAlternatives, getTools, hostname, outboundRel, outboundUrl, pricingLabel } from '../../lib/data';
 import { breadcrumbSchema, faqSchema, softwareSchema } from '../../lib/schema';
 import { battleTitle, getBattlesFor } from '../../lib/battles';
 
@@ -40,7 +40,11 @@ const faq = [
         <ToolIcon tool={tool} size={64} />
         <div>
           <h1 class="text-3xl font-black text-white sm:text-4xl">{d.name}</h1>
-          <p class="text-zinc-500">{hostname(tool)}</p>
+          <p class="text-zinc-500">
+            {hostname(tool)}
+            {d.listing === 'badge' && <span class="ml-2 text-emerald-400">✓ Verified on RapRank</span>}
+            {d.listing === 'sponsor' && <span class="ml-2 text-amber-400">Sponsored</span>}
+          </p>
         </div>
       </div>
       <p class="mt-6 text-xl text-zinc-300">{d.tagline}.</p>
@@ -52,7 +56,7 @@ const faq = [
     </article>
     <aside class="w-full space-y-4 lg:w-80">
       <div class="card space-y-4">
-        <a href={outboundUrl(tool)} target="_blank" rel="nofollow noopener sponsored" class="btn w-full justify-center">Visit {d.name} ↗</a>
+        <a href={outboundUrl(tool)} target="_blank" rel={outboundRel(tool)} class="btn w-full justify-center">Visit {d.name} ↗</a>
         <dl class="space-y-3 text-sm">
           <div><dt class="text-zinc-500">Pricing</dt><dd class="text-white">{pricingLabel(d.pricing)}</dd></div>
           {d.freeTier && <div><dt class="text-zinc-500">Free tier / plans</dt><dd class="text-white">{d.freeTier}</dd></div>}
@@ -60,6 +64,7 @@ const faq = [
         </dl>
         {tags.length > 0 && <div class="flex flex-wrap gap-2">{tags.map((t) => <a href={`/tag/${t.id}`} class="chip">{t.data.name}</a>)}</div>}
         <p class="text-xs text-zinc-600">Pricing changes often. Check the official site before you buy.</p>
+        {d.listing === 'free' && <p class="text-xs text-zinc-600">Is this your tool? <a href="/badge" class="text-brand hover:underline">Get verified</a></p>}
       </div>
       {battles.map(({ battle, a, b }) => <a href={`/battle/${battle.id}`} class="card block text-sm text-zinc-300 hover:border-brand">🥊 Blind test: {battleTitle(a, b)} →</a>)}
       {d.alternativesPage && <a href={`/alternatives/${tool.id}`} class="card block text-sm text-zinc-300 hover:border-brand">See all {d.name} alternatives →</a>}

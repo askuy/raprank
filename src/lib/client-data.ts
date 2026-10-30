@@ -1,5 +1,5 @@
 import { getCollection } from 'astro:content';
-import { getTools, outboundUrl } from './data';
+import { getTools, outboundRel, outboundUrl } from './data';
 
 /**
  * Slim tool records for client-side games (same shape as prototypes/data.js,
@@ -13,6 +13,7 @@ export async function getClientTools() {
     name: t.data.name,
     url: t.data.url,
     visit: outboundUrl(t),
+    rel: outboundRel(t),
     domain: new URL(t.data.url).hostname.replace(/^www\./, ''),
     category: t.data.category.id,
     categoryName: categories.get(t.data.category.id)!,

@@ -41,7 +41,24 @@ Suggested formats: audio as mp3 128–192 kbps, about 30s; video as mp4 H.264 72
 
 ```sh
 export CLOUDFLARE_ACCOUNT_ID=... CLOUDFLARE_API_TOKEN=...   # never commit these
-pnpm deploy
+pnpm run deploy   # note: `pnpm deploy` is a built-in pnpm command, so you must use run
 ```
 
 Note: don't use `wrangler pages ...`. New versions of wrangler auto-install the SSR adapter and modify the astro config.
+
+## Listings and backlinks
+
+The `listing` field in `tools.json` decides how outbound links are marked and where the tool ranks:
+
+| listing | rel | Ranking | How to get it |
+|---|---|---|---|
+| `free` (default) | `nofollow` | Normal | Submit and pass manual review |
+| `badge` | dofollow | Higher, with ✓ Verified | Add the /badge code to your own site; record it in `backlink: {url, checkedAt}` |
+| `sponsor` | `sponsored` | Pinned first | Paid (price in `LISTING.sponsorPrice` in `src/lib/site.ts`) |
+
+Tools with `affiliateUrl` always get `sponsored`.
+
+```sh
+pnpm backlinks scan    # scan every tool's homepage; any that link to raprank.org are auto-upgraded to badge
+pnpm backlinks check   # re-check badge tools; auto-downgrade to free if the badge is gone (run about weekly)
+```

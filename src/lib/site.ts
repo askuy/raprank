@@ -20,3 +20,9 @@ export const FREE_TOOLS = [
     blurb: 'Get 20 rapper names in one click, in styles like trap, drill, old school and Lil/Young. Free, no sign-up.',
   },
 ];
+
+// Listing tiers shown on /submit. Change the sponsor price here.
+export const LISTING = {
+  sponsorPrice: '$49/month',
+  contact: 'submit@raprank.org',
+};

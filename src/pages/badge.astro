@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { getTools } from '../lib/data';
+import { SITE } from '../lib/site';
+const tools = (await getTools()).map((t) => ({ id: t.id, name: t.data.name })).sort((a, b) => a.name.localeCompare(b.name));
+---
+<Base title="RapRank Badge: Show You're Featured" description="Add a 'Featured on RapRank' badge to your site. Tools that link back get a followed link and a Verified mark on RapRank.">
+  <Breadcrumbs items={[{ name: 'Badge', href: '/badge' }]} />
+  <div class="mx-auto max-w-3xl">
+    <h1 class="text-4xl font-black text-white">Featured on RapRank badge</h1>
+    <p class="mt-4 text-lg text-zinc-400">Listed on RapRank? Add the badge to your homepage or footer. Once we confirm it's live, your listing gets a <strong class="text-white">✓ Verified</strong> mark, a followed link (no <code>nofollow</code>), and a boost in category rankings.</p>
+
+    <div class="mt-10 grid gap-4 sm:grid-cols-2">
+      <div class="card flex items-center justify-center bg-zinc-950 py-8"><img src="/badge/featured-dark.svg" width="220" height="56" alt="Featured on RapRank (dark)" /></div>
+      <div class="card flex items-center justify-center bg-white py-8"><img src="/badge/featured-light.svg" width="220" height="56" alt="Featured on RapRank (light)" /></div>
+    </div>
+
+    <div class="card mt-8 space-y-4">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="text-sm text-zinc-400">Your tool
+          <select id="tool" class="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-white">
+            {tools.map((t) => <option value={t.id}>{t.name}</option>)}
+          </select>
+        </label>
+        <label class="text-sm text-zinc-400">Theme
+          <select id="theme" class="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-white">
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </label>
+      </div>
+      <textarea id="code" readonly rows="4" class="w-full rounded-lg border border-zinc-700 bg-zinc-950 p-3 font-mono text-xs text-zinc-200"></textarea>
+      <button id="copy" type="button" class="btn">Copy embed code</button>
+    </div>
+
+    <section class="prose-rr mt-12 space-y-3">
+      <h2 class="text-2xl font-bold text-white">How verification works</h2>
+      <p>1. Paste the code on a public page of your site (the homepage or footer is best). 2. Email us the page URL at <a class="text-brand" href={`mailto:submit@raprank.org?subject=Badge%20added`}>submit@raprank.org</a>. 3. We check that the badge links to RapRank, then switch your listing to Verified.</p>
+      <p>We re-check badges regularly. If the badge is removed, the listing goes back to a standard (nofollow) link.</p>
+      <p>Not listed yet? <a href="/submit" class="text-brand hover:underline">Submit your tool</a> first.</p>
+    </section>
+  </div>
+  <script define:vars={{ site: SITE.url }}>
+    const tool = document.getElementById('tool');
+    const theme = document.getElementById('theme');
+    const code = document.getElementById('code');
+    const copy = document.getElementById('copy');
+    function render() {
+      code.value = `<a href="${site}/tool/${tool.value}" target="_blank" title="Featured on RapRank"><img src="${site}/badge/featured-${theme.value}.svg" alt="Featured on RapRank" width="220" height="56" /></a>`;
+      copy.textContent = 'Copy embed code';
+    }
+    tool.addEventListener('change', render);
+    theme.addEventListener('change', render);
+    copy.addEventListener('click', () => { navigator.clipboard?.writeText(code.value); copy.textContent = 'Copied!'; });
+    render();
+  </script>
+</Base>

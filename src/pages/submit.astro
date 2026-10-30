@@ -1,22 +1,53 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE } from '../lib/site';
+import { LISTING } from '../lib/site';
+
+const body = encodeURIComponent(
+  'Tool name:\nURL:\nOne-line description:\nCategory (rap video / music video / rap song / voice / lyrics):\nPricing & free tier:\n3-5 key features:\nPlan (Free / Badge / Sponsored):\n',
+);
+const mail = (plan: string) => `mailto:${LISTING.contact}?subject=${encodeURIComponent(`RapRank listing: ${plan}`)}&body=${body}`;
+const tiers = [
+  {
+    name: 'Free listing',
+    price: 'Free',
+    points: ['Your own tool page plus a spot in your category', 'Can be picked for battles and best-of lists', 'Standard link (nofollow)', 'Reviewed in the order we receive submissions'],
+    cta: 'Submit for free',
+    plan: 'Free',
+  },
+  {
+    name: 'Verified (badge)',
+    price: 'Free, just link back',
+    points: ['Everything in Free', 'Add the RapRank badge to your site', '✓ Verified mark and a higher spot in your category', 'Followed link (no nofollow)'],
+    cta: 'Get the badge',
+    href: '/badge',
+    highlight: true,
+  },
+  {
+    name: 'Sponsored',
+    price: LISTING.sponsorPrice,
+    points: ['Pinned at the top of your category and on the home page', 'Featured in the Arena hot matchups', 'A blind-test battle against a competitor (first-generation outputs, clearly labeled)', 'Link marked rel="sponsored", as Google requires'],
+    cta: 'Contact us',
+    plan: 'Sponsored',
+  },
+];
 ---
-<Base title="Submit Your AI Tool" description="Submit your AI rap, music video, voice or lyrics tool to the RapRank directory.">
-  <div class="mx-auto max-w-2xl">
-    <h1 class="text-4xl font-black text-white">Submit your AI tool</h1>
-    <p class="mt-4 text-lg text-zinc-400">Built an AI rap video, music video, rap song, rapper voice or lyrics tool? Send us the details and we'll review it for the directory.</p>
-    <div class="mt-8 grid gap-4 sm:grid-cols-2">
-      <div class="card">
-        <p class="text-lg font-bold text-white">Free listing</p>
-        <p class="mt-2 text-sm text-zinc-400">Reviewed in the order we receive them. Your tool gets its own page plus a spot in its category.</p>
-      </div>
-      <div class="card border-brand">
-        <p class="text-lg font-bold text-white">Featured listing</p>
-        <p class="mt-2 text-sm text-zinc-400">Faster review, a featured badge, and a pinned spot on your category page and the home page.</p>
-      </div>
+<Base title="Submit Your AI Tool to RapRank" description="List your AI rap, music video, voice or lyrics tool on RapRank. Free listing, Verified badge listing, or Sponsored placement.">
+  <div class="mx-auto max-w-5xl">
+    <h1 class="text-center text-4xl font-black text-white">Get your AI tool on RapRank</h1>
+    <p class="mx-auto mt-4 max-w-2xl text-center text-lg text-zinc-400">We list AI tools for rap videos, music videos, rap songs, rapper voices and lyrics. Every submission is checked by a person before it goes live.</p>
+    <div class="mt-10 grid gap-4 md:grid-cols-3">
+      {tiers.map((t) => (
+        <div class={`card flex flex-col ${t.highlight ? 'border-brand' : ''}`}>
+          <p class="text-lg font-bold text-white">{t.name}</p>
+          <p class="mt-1 text-2xl font-black text-brand">{t.price}</p>
+          <ul class="mt-4 flex-1 space-y-2 text-sm text-zinc-300">{t.points.map((p) => <li>• {p}</li>)}</ul>
+          <a href={t.href ?? mail(t.plan!)} class={`mt-6 justify-center ${t.highlight ? 'btn' : 'inline-flex rounded-lg border border-zinc-600 px-4 py-2 font-semibold text-white hover:border-brand'}`}>{t.cta}</a>
+        </div>
+      ))}
     </div>
-    <p class="mt-8 text-zinc-400">Include: tool name, URL, a one-line description, pricing and free tier, and 3–5 key features.</p>
-    <a href={SITE.submitUrl} class="btn mt-6">Email your submission</a>
+    <section class="prose-rr mx-auto mt-12 max-w-3xl space-y-3">
+      <h2 class="text-2xl font-bold text-white">What we don't list</h2>
+      <p>Sites that don't load, aren't related to AI music or rap, are thin wrappers with no product of their own, or host adult or pirated content. Paid plans never change a battle result or a ranking in a blind test.</p>
+    </section>
   </div>
 </Base>

@@ -11,7 +11,11 @@ const d = tool.data;
     <ToolIcon tool={tool} />
     <div class="min-w-0">
       <p class="truncate font-semibold text-white group-hover:text-brand">{d.name}</p>
-      <p class="text-xs text-zinc-500">{pricingLabel(d.pricing)}{d.featured && ' · Featured'}</p>
+      <p class="text-xs text-zinc-500">
+        {pricingLabel(d.pricing)}{d.featured && " · Editor's pick"}
+        {d.listing === 'badge' && <span class="ml-1 text-emerald-400">✓ Verified</span>}
+        {d.listing === 'sponsor' && <span class="ml-1 text-amber-400">Sponsored</span>}
+      </p>
     </div>
   </div>
   <p class="text-sm text-zinc-400">{d.tagline}</p>

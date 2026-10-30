@@ -8,7 +8,7 @@ const PRICING_ORDER = { free: 0, freemium: 1, paid: 2 } as const;
 
 /** Featured and sponsored first, then by name. */
 function rank(a: Tool, b: Tool) {
-  const score = (t: Tool) => (t.data.sponsor ? 2 : 0) + (t.data.featured ? 1 : 0);
+  const score = (t: Tool) => (t.data.listing === 'sponsor' ? 4 : 0) + (t.data.featured ? 2 : 0) + (t.data.listing === 'badge' ? 1 : 0);
   return score(b) - score(a) || a.data.name.localeCompare(b.data.name);
 }
 
@@ -95,6 +95,13 @@ export function outboundUrl(t: Tool) {
   const u = new URL(t.data.url);
   u.searchParams.set('ref', 'raprank.org');
   return u.toString();
+}
+
+/** Google requires paid/affiliate links to be marked; only badge partners get a followed link. */
+export function outboundRel(t: Tool) {
+  if (t.data.listing === 'sponsor' || t.data.affiliateUrl) return 'sponsored noopener';
+  if (t.data.listing === 'badge') return 'noopener';
+  return 'nofollow noopener';
 }
 
 export function hostname(t: Tool) {

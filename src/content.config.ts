@@ -38,8 +38,15 @@ const tools = defineCollection({
     pricing: z.enum(['free', 'freemium', 'paid']).nullable(),
     freeTier: z.string().nullable(),
     brandKeyword: z.string(),
+    // Editor's pick (free, editorial). Not paid.
     featured: z.boolean().default(false),
-    sponsor: z.boolean().default(false),
+    // Listing tier, decides outbound link rel and placement:
+    //   free    → rel="nofollow"
+    //   badge   → dofollow, earned by linking back with a RapRank badge (see `backlink`)
+    //   sponsor → rel="sponsored", paid placement, pinned first
+    listing: z.enum(['free', 'badge', 'sponsor']).default('free'),
+    // Page on the tool's site that carries our badge; checked by `pnpm backlinks check`.
+    backlink: z.object({ url: z.url(), checkedAt: z.string() }).optional(),
     alternativesPage: z.boolean().default(false),
     // Hand-picked, ordered alternatives; unverified ids are skipped.
     alternatives: z.array(z.string()).optional(),

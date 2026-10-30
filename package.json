@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "battle": "node scripts/battle.mjs",
-    "deploy": "astro build && wrangler deploy"
+    "deploy": "astro build && wrangler deploy",
+    "backlinks": "NODE_USE_ENV_PROXY=1 node scripts/backlinks.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

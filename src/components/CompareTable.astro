@@ -1,5 +1,5 @@
 ---
-import { outboundUrl, pricingLabel, type Tool } from '../lib/data';
+import { outboundRel, outboundUrl, pricingLabel, type Tool } from '../lib/data';
 interface Props { tools: Tool[] }
 const { tools } = Astro.props;
 ---
@@ -16,7 +16,7 @@ const { tools } = Astro.props;
           <td class="p-3">{pricingLabel(t.data.pricing)}</td>
           <td class="p-3 text-zinc-400">{t.data.freeTier ?? '—'}</td>
           <td class="p-3 text-zinc-400">{t.data.features[0]}</td>
-          <td class="p-3"><a href={outboundUrl(t)} target="_blank" rel="nofollow noopener sponsored" class="text-brand hover:underline">Visit ↗</a></td>
+          <td class="p-3"><a href={outboundUrl(t)} target="_blank" rel={outboundRel(t)} class="text-brand hover:underline">Visit ↗</a></td>
         </tr>
       ))}
     </tbody>

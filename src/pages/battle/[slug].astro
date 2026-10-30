@@ -5,7 +5,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import ToolIcon from '../../components/ToolIcon.astro';
 import Faq from '../../components/Faq.astro';
 import { battleTitle, getBattle, getBattles } from '../../lib/battles';
-import { outboundUrl, pricingLabel } from '../../lib/data';
+import { outboundRel, outboundUrl, pricingLabel } from '../../lib/data';
 import { breadcrumbSchema, faqSchema } from '../../lib/schema';
 
 export async function getStaticPaths() {
@@ -118,7 +118,7 @@ const rows: [string, (t: typeof a) => string][] = [
           {rows.map(([label, get]) => (
             <tr><td class="p-3 text-zinc-500">{label}</td>{[a, b].map((t) => <td class="p-3 text-zinc-300">{get(t)}</td>)}</tr>
           ))}
-          <tr><td class="p-3"></td>{[a, b].map((t) => <td class="p-3"><a href={outboundUrl(t)} target="_blank" rel="nofollow noopener sponsored" class="btn">Try {t.data.name} ↗</a></td>)}</tr>
+          <tr><td class="p-3"></td>{[a, b].map((t) => <td class="p-3"><a href={outboundUrl(t)} target="_blank" rel={outboundRel(t)} class="btn">Try {t.data.name} ↗</a></td>)}</tr>
         </tbody>
       </table>
     </div>
